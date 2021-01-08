@@ -96,7 +96,7 @@ namespace LifeS
             if (observedHuman != null && observedHuman.alive)
             {
                 humanSatiety.Text = $"Satiety: {observedHuman.satiety}";
-                status.Text = $"Sex: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";
+                status.Text = $"Status: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";
                 labelTimeChild.Text = $"Time from last child: {observedHuman.timeLastChild}";
                 sex.Text= $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
             }

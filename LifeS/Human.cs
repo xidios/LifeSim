@@ -55,10 +55,15 @@ namespace LifeS
             if(timeLastChild>0)
                 timeLastChild--;
         }
-        public void MoveRandom(int _x, int _y)
+        public void MoveRandom(int xSize, int ySize)
         {
             Direction direction = (Direction)random.Next(5);
-            Move(_x, _y,direction);
+            Move(xSize, ySize,direction);
+        }
+        public void PanicMove(int xSize, int ySize)
+        {
+            Direction direction = (Direction)random.Next(4);
+            Move(xSize, ySize, direction);
         }
         private void Move(int xSize, int ySize, Direction direction)
         {
@@ -128,16 +133,17 @@ namespace LifeS
         }
         private void SearchFood(Cell[,] field)
         {
-            int left = field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);            
-            Plant tplant = null;
+            Direction direction = Direction.none;
+            int distance = viewDistance;
+
             for (int v = 0; v < viewDistance; v++)
             {
                 if (x - v >= 0)
                 {
                     if (field[x - v, y].plant != null )
                     {
-                        tplant = field[x - v, y].plant;
-                        left = v;
+                        direction = Direction.left;
+                        distance = v;
                         break;
                     }
                 }
@@ -145,8 +151,8 @@ namespace LifeS
                 {
                     if (field[x, y - v].plant != null)
                     {
-                        tplant = field[x, y - v].plant;
-                        up = v;
+                        direction = Direction.up;
+                        distance = v;
                         break;
                     }
                 }
@@ -154,8 +160,8 @@ namespace LifeS
                 {
                     if (field[x + v, y].plant != null)
                     {
-                        tplant = field[x + v, y].plant;
-                        right = v;
+                        direction = Direction.right;
+                        distance = v;
                         break;
                     }
                 }
@@ -163,42 +169,28 @@ namespace LifeS
                 {
                     if (field[x, y + v].plant != null)
                     {
-                        tplant = field[x, y + v].plant;
-                        down = v;
+                        direction = Direction.down;
+                        distance = v;
                         break;
                     }
                 }
             }
-           
-           
 
 
 
-            if (left == 0 || right == 0 || up == 0 || down == 0)
+
+
+            if (distance == 0)
             {
                 EatPlant(x, y, field);
 
             }
             else
             {
-                Direction direction = (Direction)random.Next(4);
-                if (left < right && left < up && left < down)
-                {
-                    direction = Direction.left;
-                }
-                else if (right < left && right < up && right < down)
-                {
-                    direction = Direction.right;
-                }
-                else if (up < left && up < right && up < down)
-                {
-                    direction = Direction.up;
-                }
-                else if (down < left && down < right && down < up)
-                { direction = Direction.down; }
-
-
-                Move(field.GetLength(0), field.GetLength(1), direction);
+                if (direction == Direction.none)
+                    PanicMove(field.GetLength(0), field.GetLength(1));
+                else
+                    Move(field.GetLength(0), field.GetLength(1), direction);
 
             }
 
@@ -208,7 +200,9 @@ namespace LifeS
 
         private void SearchPartner(Cell[,] field)
         {
-            int left = field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);           
+            Direction direction = Direction.none;
+            int distance=viewDistance;
+
             Human thuman = null;
             for (int v = 0; v < viewDistance; v++)
             {
@@ -221,7 +215,8 @@ namespace LifeS
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
                                 thuman = hum;
-                                left = v;
+                                direction = Direction.left;
+                                distance = v;
                                 v = viewDistance;
                                 break;
                             }
@@ -239,8 +234,9 @@ namespace LifeS
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
                                 thuman = hum;
-                                up = v;
-                                v=viewDistance;
+                                direction = Direction.up;
+                                distance = v;
+                                v = viewDistance;
                                 break;
                             }
 
@@ -258,7 +254,8 @@ namespace LifeS
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
                                 thuman = hum;
-                                right = v;
+                                direction = Direction.right;
+                                distance = v;
                                 v = viewDistance;
                                 break;
                             }
@@ -277,7 +274,8 @@ namespace LifeS
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
                                 thuman = hum;
-                                down = v;
+                                direction = Direction.down;
+                                distance = v;
                                 v = viewDistance;
                                 break;
                             }
@@ -288,30 +286,16 @@ namespace LifeS
             }
 
 
-            if (((left == 0 && left<viewDistance)|| (right == 0 && right< viewDistance) || (up == 0 && up< viewDistance )|| (down==0&& down < viewDistance))&& thuman!=null) //left == 0 || right == 0 || up == 0 || down == 0
+            if (distance==0&& thuman!=null)
             {
                 DoChild(x, y, field,thuman);
             }
             else
             {
-                Direction direction = (Direction)random.Next(4);
-                if (left < right && left < up && left < down)
-                {
-                    direction = Direction.left;
-                }
-                else if (right < left && right < up && right < down)
-                {
-                    direction = Direction.right;
-                }
-                else if (up < left && up < right && up < down)
-                {
-                    direction = Direction.up;
-                }
-                else if (down < left && down < right && down < up)
-                { direction = Direction.down; }
-
-
-                Move(field.GetLength(0), field.GetLength(1), direction);
+                if (direction == Direction.none)
+                    PanicMove(field.GetLength(0), field.GetLength(1));
+                else
+                    Move(field.GetLength(0), field.GetLength(1), direction);
 
             }
         }

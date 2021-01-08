@@ -12,7 +12,6 @@ namespace LifeS
         up,
         right,
         down,
-        none,
-        notAvaible
+        none
     }
 }
