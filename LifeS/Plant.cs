@@ -18,6 +18,10 @@ namespace LifeS
             y = _y;
             alive = true;
         }
+        public void Dead()
+        {
+            alive = false;
+        }
 
         
     }

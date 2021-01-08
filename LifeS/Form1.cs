@@ -16,6 +16,9 @@ namespace LifeS
         private Graphics graphics;
         private int resolution;
         private Map gameEngine;
+        int sizeOfCell;
+        int rows=3000;
+        int cols=3000;
         private Human observedHuman = null;
 
         public Form1()
@@ -28,20 +31,26 @@ namespace LifeS
             
             buttonStart.Text = "RESTART";
             buttonPause.Text = "Pause";
-            humanSatiety.Text = "Satiety of human";
 
+            labelTimeChild.Text = null;
+            humanSatiety.Text = null;
+            status.Text = null;
+            sex.Text = null;
+            observedHuman = null;
+
+            sizeOfCell = (int)Resolution.Value;
             resolution = (int)Resolution.Value;//присваиваем значение в инт
 
             gameEngine = new Map(
                 rows: pictureBox1.Height / resolution,
                 cols: pictureBox1.Width / resolution,
-                density: (int)Density.Value //(int)Density.Minimum + (int)Density.Maximum - (int)Density.Value
-                );
+                density: (int)Density.Minimum + (int)Density.Maximum - (int)Density.Value
+                ) ;
 
 
             Text = $"Generation {gameEngine.CurrentGeneration}";
 
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);//создаем битмап. Новую картинку
+            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
             graphics = Graphics.FromImage(pictureBox1.Image);//передали картинку из прошлой строчки
             timer1.Start();
         }
@@ -54,7 +63,7 @@ namespace LifeS
             {
                 for (int y = 0; y < field.GetLength(1); y++)
                 {
-                    if (field[x, y].plants.Count() == 1 && field[x, y].plants[0].alive)
+                    if (field[x, y].plant!=null && field[x, y].plant.alive)
                     {
                         graphics.FillRectangle(Brushes.Green, x * resolution, y * resolution, resolution, resolution);
 
@@ -73,17 +82,33 @@ namespace LifeS
                         graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
                     }
                     
+                    
                 }
             }
-            if (observedHuman != null)
+            if (gameEngine.mapEvents != null)
+            {
+                foreach (Event e in gameEngine.mapEvents)
+                    if(e.exist)
+                        graphics.FillRectangle(Brushes.Gold, e.x * resolution, e.y * resolution, resolution, resolution);
+            }
+
+
+            if (observedHuman != null && observedHuman.alive)
             {
                 humanSatiety.Text = $"Satiety: {observedHuman.satiety}";
-                status.Text = $"Status: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";
+                status.Text = $"Sex: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";
                 labelTimeChild.Text = $"Time from last child: {observedHuman.timeLastChild}";
+                sex.Text= $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
             }
             else
             {
-                humanSatiety.Text = "There is no human here";
+                observedHuman = null;
+                status.Text = "Human not selected";
+                labelTimeChild.Text = null;
+                humanSatiety.Text = null;
+                status.Text = null;
+                sex.Text = null;
+
             }
 
             Text = $"Generation {gameEngine.CurrentGeneration}";
@@ -129,18 +154,26 @@ namespace LifeS
                 observedHuman = gameEngine.GetHuman(x, y);
                 if (observedHuman != null) {
                     humanSatiety.Text = $"Satiety: {observedHuman.satiety}";
-                    status.Text = $"Status: {((observedHuman.satiety == 0)?"Dead":"Alive")}";
-                    labelGender.Text = $"Status: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
+                    status.Text = $"Status: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";// $"{x} {y}"                 
                     labelTimeChild.Text = $"Time from last child: {observedHuman.timeLastChild}";
+                    sex.Text = $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
 
-                    
                     graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
                 }
                 else
                 {
-                    humanSatiety.Text = "There is no human here";
+                    labelTimeChild.Text = null;
+                    humanSatiety.Text = null;
                     status.Text = null;
+                    sex.Text = null;
                 }
+            }
+            if (e.Button == MouseButtons.Right)
+            {
+                int x = e.Location.X / resolution;
+                int y = e.Location.Y / resolution;
+                gameEngine.CreateEvent(x, y);
+                
             }
         }
     }

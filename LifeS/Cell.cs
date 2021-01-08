@@ -11,9 +11,8 @@ namespace LifeS
         public int x;
         public int y;
         public List<Human> humans = new List<Human>();
-        public List<Plant> plants = new List<Plant>();
-        public List<Human> childs = new List<Human>();
-        public bool plant = false;
+        public Plant plant = null;
+        public List<Human> childs = new List<Human>();        
 
 
 
@@ -22,15 +21,7 @@ namespace LifeS
             this.x = _x;
             this.y = _y;
             
-        }
-        public void CreatePlant(Random rand)
-        {
-            if (!plant)
-            {   
-                if(rand.Next(3000)==0)
-                    plant = true;
-            }
-        }
+        }        
 
     }
 

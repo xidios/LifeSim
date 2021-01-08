@@ -31,8 +31,8 @@ namespace LifeS
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.sex = new System.Windows.Forms.Label();
             this.labelTimeChild = new System.Windows.Forms.Label();
-            this.labelGender = new System.Windows.Forms.Label();
             this.status = new System.Windows.Forms.Label();
             this.humanSatiety = new System.Windows.Forms.Label();
             this.TotalHuman = new System.Windows.Forms.Label();
@@ -65,8 +65,8 @@ namespace LifeS
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.sex);
             this.splitContainer1.Panel1.Controls.Add(this.labelTimeChild);
-            this.splitContainer1.Panel1.Controls.Add(this.labelGender);
             this.splitContainer1.Panel1.Controls.Add(this.status);
             this.splitContainer1.Panel1.Controls.Add(this.humanSatiety);
             this.splitContainer1.Panel1.Controls.Add(this.TotalHuman);
@@ -86,6 +86,15 @@ namespace LifeS
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
             // 
+            // sex
+            // 
+            this.sex.AutoSize = true;
+            this.sex.Location = new System.Drawing.Point(49, 351);
+            this.sex.Name = "sex";
+            this.sex.Size = new System.Drawing.Size(25, 13);
+            this.sex.TabIndex = 17;
+            this.sex.Text = "Sex";
+            // 
             // labelTimeChild
             // 
             this.labelTimeChild.AutoSize = true;
@@ -94,15 +103,6 @@ namespace LifeS
             this.labelTimeChild.Size = new System.Drawing.Size(97, 13);
             this.labelTimeChild.TabIndex = 16;
             this.labelTimeChild.Text = "Time from last child";
-            // 
-            // labelGender
-            // 
-            this.labelGender.AutoSize = true;
-            this.labelGender.Location = new System.Drawing.Point(49, 351);
-            this.labelGender.Name = "labelGender";
-            this.labelGender.Size = new System.Drawing.Size(42, 13);
-            this.labelGender.TabIndex = 15;
-            this.labelGender.Text = "Gender";
             // 
             // status
             // 
@@ -262,7 +262,6 @@ namespace LifeS
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.NumericUpDown Resolution;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Timer timer1;
@@ -275,8 +274,9 @@ namespace LifeS
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Label humanSatiety;
         private System.Windows.Forms.Label status;
-        private System.Windows.Forms.Label labelGender;
         private System.Windows.Forms.Label labelTimeChild;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label sex;
     }
 }
 

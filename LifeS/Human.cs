@@ -15,16 +15,13 @@ namespace LifeS
         public int y;
         public bool changed = false;
         public bool alive;
-        public int timeLastChild = 0;
+        public int timeLastChild = 100;
+        private int viewDistance = 30;
         public Gender gender;
         
         Random random;
 
 
-        //public bool isAlive()
-        //{
-        //    return alive;
-        //}
         public Human(int _x, int _y,Random rand)
         {
             x = _x;
@@ -45,7 +42,7 @@ namespace LifeS
                 SearchFood(field);
 
             }
-            else if (satiety >= 70 && timeLastChild>=100)
+            else if (satiety >= 70 && timeLastChild==0)
             {
                 SearchPartner(field);
                 
@@ -55,8 +52,8 @@ namespace LifeS
                 MoveRandom(_x, _y);
             }
             
-
-            timeLastChild++;
+            if(timeLastChild>0)
+                timeLastChild--;
         }
         public void MoveRandom(int _x, int _y)
         {
@@ -111,10 +108,10 @@ namespace LifeS
         private void EatPlant(int _x, int _y,Cell[,] field)
         {
             
-                if (field[_x, _y].plants.Count()==1 && field[_x, _y].plants[0].alive)
+                if (field[_x, _y].plant!=null && field[_x, _y].plant.alive)
                 {
                     satiety += 50;
-                    field[_x, _y].plants[0].alive = false;
+                    field[_x, _y].plant.Dead();
                 }
             
             
@@ -125,59 +122,62 @@ namespace LifeS
 
 
         public void Dead()
-        {
-            if (satiety == 0)
-            {
-                alive = false;
-            }
+        {           
+            
+                alive = false;           
         }
         private void SearchFood(Cell[,] field)
         {
-            int left= field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);
-            for (int i = x; i >= 0; i--)//слева
+            int left = field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);            
+            Plant tplant = null;
+            for (int v = 0; v < viewDistance; v++)
             {
-                
-                if (field[i, y].plants.Count() == 1 && field[i, y].plants[0].alive)
+                if (x - v >= 0)
                 {
-                    left = x-i;
-                    break;
+                    if (field[x - v, y].plant != null )
+                    {
+                        tplant = field[x - v, y].plant;
+                        left = v;
+                        break;
+                    }
                 }
-                
+                if (y - v >= 0)
+                {
+                    if (field[x, y - v].plant != null)
+                    {
+                        tplant = field[x, y - v].plant;
+                        up = v;
+                        break;
+                    }
+                }
+                if (x + v < field.GetLength(0))
+                {
+                    if (field[x + v, y].plant != null)
+                    {
+                        tplant = field[x + v, y].plant;
+                        right = v;
+                        break;
+                    }
+                }
+                if (y + v < field.GetLength(1))
+                {
+                    if (field[x, y + v].plant != null)
+                    {
+                        tplant = field[x, y + v].plant;
+                        down = v;
+                        break;
+                    }
+                }
             }
+           
+           
 
-            for (int i = x; i < field.GetLength(0); i++)//справа
-            {
-                if (field[i, y].plants.Count() == 1 && field[i, y].plants[0].alive)
-                {
-                    right = i - x;
-                    break;
-                }
-                
-            }
-            for (int i = y; i >= 0; i--)//сверху
-            {
-                if (field[x, i].plants.Count() == 1 && field[x, i].plants[0].alive)
-                {
-                    up = y - i;
-                    break;
-                }
-                
-            }
-            for (int i = y; i < field.GetLength(1); i++)//снизу
-            {
-                if (field[x, i].plants.Count() == 1 && field[x, i].plants[0].alive)
-                {
-                    down = i - y;
-                    break;
-                }
-                
-            }
 
 
             if (left == 0 || right == 0 || up == 0 || down == 0)
             {
                 EatPlant(x, y, field);
-                
+
             }
             else
             {
@@ -194,9 +194,9 @@ namespace LifeS
                 {
                     direction = Direction.up;
                 }
-                else if(down < left && down < right && down < up) 
+                else if (down < left && down < right && down < up)
                 { direction = Direction.down; }
-                
+
 
                 Move(field.GetLength(0), field.GetLength(1), direction);
 
@@ -208,120 +208,89 @@ namespace LifeS
 
         private void SearchPartner(Cell[,] field)
         {
-            int left = field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);
-            int _x= -1, _y= -1;
-            Human h =null;
-            for (int i = x; i >= 0; i--)//слева
+            int left = field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);           
+            Human thuman = null;
+            for (int v = 0; v < viewDistance; v++)
             {
-                if (h == null && field[i, y].humans != null)
+                if (x - v >= 0)
                 {
-                    foreach (Human human in field[i, y].humans)
+                    if (field[x - v, y].humans != null)
                     {
-                        if (human.gender != gender && human.satiety >= 70 && human.timeLastChild >= 100)
+                        foreach (Human hum in field[x - v, y].humans)
                         {
-                            left = x - i;
-                            h = human;
-                            break;
-                        }
+                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            {
+                                thuman = hum;
+                                left = v;
+                                v = viewDistance;
+                                break;
+                            }
 
+                        }
+                        
                     }
                 }
-                else break;
-                //if (field[i, y].humans.Count() > 0 && field[i, y].humans[0].gender != gender && field[i, y].humans[0].satiety >= 70 && field[i, y].humans[0].timeLastChild >= 100)
-                //{
-                //    _x = i;
-                //    _y = y;
-                //    left = x - i;
-                //    h = field[_x,_y].humans[0];
-                //    break;
-                //}
-
-            }
-
-            for (int i = x; i < field.GetLength(0); i++)//справа
-            {
-
-                if (h == null && field[i, y].humans != null)
+                if (y - v >= 0)
                 {
-                    foreach (Human human in field[i, y].humans)
+                    if (field[x, y - v].humans != null)
                     {
-                        if (human.gender != gender && human.satiety >= 70 && human.timeLastChild >= 100)
+                        foreach (Human hum in field[x, y - v].humans)
                         {
-                            right = x - i;
-                            h = human;
-                            break;
+                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            {
+                                thuman = hum;
+                                up = v;
+                                v=viewDistance;
+                                break;
+                            }
+
                         }
 
+                        
                     }
                 }
-                else break;
-                //if (field[i, y].humans.Count() >0 && field[i, y].humans[0].gender != gender && field[i, y].humans[0].satiety>=70 && field[i, y].humans[0].timeLastChild>=100)
-                //{
-                //    _x = i;
-                //    _y = y;
-                //    right = i - x;
-                //    h = field[_x, _y].humans[0];
-                //    break;
-                //}
-
-            }
-            for (int i = y; i >= 0; i--)//сверху
-            {
-                if (h == null && field[x, i].humans != null)
+                if (x + v < field.GetLength(0))
                 {
-                    foreach (Human human in field[i, y].humans)
+                    if (field[x + v, y].humans != null)
                     {
-                        if (human.gender != gender && human.satiety >= 70 && human.timeLastChild >= 100)
+                        foreach (Human hum in field[x + v, y].humans)
                         {
-                            up = x - i;
-                            h = human;
-                            break;
+                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            {
+                                thuman = hum;
+                                right = v;
+                                v = viewDistance;
+                                break;
+                            }
+
                         }
 
+                        
                     }
                 }
-                else break;
-                //if (field[x, i].humans.Count() >0 && field[x, i].humans[0].gender != gender && field[x, i].humans[0].satiety >= 70 && field[x, i].humans[0].timeLastChild >= 100)
-                //{
-                //    _x = x;
-                //    _y = i;
-                //    up = y - i;
-                //    h = field[_x, _y].humans[0];
-                //    break;
-                //}
-
-            }
-            for (int i = y; i < field.GetLength(1); i++)//снизу
-            {
-                if (h == null && field[i, y].humans != null)
+                if (y + v < field.GetLength(1))
                 {
-                    foreach (Human human in field[i, y].humans)
+                    if (field[x, y + v].humans != null)
                     {
-                        if (human.gender != gender && human.satiety >= 70 && human.timeLastChild >= 100)
+                        foreach (Human hum in field[x, y + v].humans)
                         {
-                            down = x - i;
-                            h = human;
-                            break;
-                        }
+                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            {
+                                thuman = hum;
+                                down = v;
+                                v = viewDistance;
+                                break;
+                            }
 
+                        }                        
                     }
                 }
-                else break;
-                //if (field[x, i].humans.Count() >0 && field[x, i].humans[0].gender != gender && field[x, i].humans[0].satiety >= 70 && field[x, i].humans[0].timeLastChild >= 100)
-                //{
-                //    _x = x;
-                //    _y = i;
-                //    down = i - y;
-                //    h = field[_x, _y].humans[0];
-                //    break;
-                //}
-
             }
 
 
-            if ((left == 0 || right == 0 || up == 0 || down == 0 )&& h!=null) //left == 0 || right == 0 || up == 0 || down == 0
+            if (((left == 0 && left<viewDistance)|| (right == 0 && right< viewDistance) || (up == 0 && up< viewDistance )|| (down==0&& down < viewDistance))&& thuman!=null) //left == 0 || right == 0 || up == 0 || down == 0
             {
-                DoChild(x, y, field,h);
+                DoChild(x, y, field,thuman);
             }
             else
             {
@@ -347,88 +316,21 @@ namespace LifeS
             }
         }
 
+        private void MoveForTarget(int left,int right,int up,int down,Direction direction)
+        {
+
+        }
+
         private void DoChild(int _x, int _y, Cell[,] field,Human h)
         {
             Human c = new Human(_x,_y,random);
             c.changed = false;
             field[_x, _y].childs.Add(c);
-            h.timeLastChild = 0;
-            timeLastChild = 0;
+            h.timeLastChild = 150;
+            timeLastChild = 200;
         }
 
 
     }
 }
 
-//int left = field.GetLength(0), up = field.GetLength(1), right = field.GetLength(0), down = field.GetLength(1);
-//for (int i = x; i >= 0; i--)//слева
-//{
-
-//    if (field[i, y].humans.Count() == 1 && field[i, y].humans[0].gender != gender && field[i, y].humans[0].satiety >= 70 && field[i, y].humans[0].timeLastChild >= 100)
-//    {
-//        left = x - i;
-//        break;
-//    }
-
-//}
-
-//for (int i = x; i < field.GetLength(0); i++)//справа
-//{
-//    if (field[i, y].humans.Count() == 1 && field[i, y].humans[0].gender != gender && field[i, y].humans[0].satiety >= 70 && field[i, y].humans[0].timeLastChild >= 100)
-//    {
-//        right = i - x;
-//        break;
-//    }
-
-//}
-//for (int i = y; i >= 0; i--)//сверху
-//{
-//    if (field[x, i].humans.Count() == 1 && field[x, i].humans[0].gender != gender && field[x, i].humans[0].satiety >= 70 && field[x, i].humans[0].timeLastChild >= 100)
-//    {
-//        up = y - i;
-//        break;
-//    }
-
-//}
-//for (int i = y; i < field.GetLength(1); i++)//снизу
-//{
-//    if (field[x, i].humans.Count() == 1 && field[x, i].humans[0].gender != gender && field[x, i].humans[0].satiety >= 70 && field[x, i].humans[0].timeLastChild >= 100)
-//    {
-//        down = i - y;
-//        break;
-//    }
-
-//}
-
-
-//if (gender == Gender.female && (left == 0 || right == 0 || up == 0 || down == 0)) //left == 0 || right == 0 || up == 0 || down == 0
-//{
-//    DoChild(x, y, field);
-//}
-//else if (gender == Gender.female && (left == 1 || right == 1 || up == 1 || down == 1 || left == 0 || right == 0 || up == 0 || down == 0))
-//{
-//    Move(field.GetLength(0), field.GetLength(1), Direction.none);
-//    return;
-//}
-//else
-//{
-//    Direction direction = (Direction)random.Next(4);
-//    if (left < right && left < up && left < down)
-//    {
-//        direction = Direction.left;
-//    }
-//    else if (right < left && right < up && right < down)
-//    {
-//        direction = Direction.right;
-//    }
-//    else if (up < left && up < right && up < down)
-//    {
-//        direction = Direction.up;
-//    }
-//    else if (down < left && down < right && down < up)
-//    { direction = Direction.down; }
-
-
-//    Move(field.GetLength(0), field.GetLength(1), direction);
-
-//}
