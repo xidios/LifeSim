@@ -8,7 +8,14 @@ namespace LifeS
 {
     class Map
     {
-        
+     
+        //public struct Border
+        //{
+        //    public int left;
+        //    public int right;
+        //    public int top;
+        //    public int bot;
+        //};
         private Cell[,] field;
         public List<Event> mapEvents=new List<Event>();
         public readonly int rows;
@@ -16,27 +23,32 @@ namespace LifeS
         Random random = new Random();
 
         public int CurrentGeneration { get; private set; }
-        public int TotalOfHumans { get; private set; }
-       
-      
+        public int TotalOfHerbivores { get; private set; }
+        public int TotalOfPredators { get; private set; }
+
+
         public Map(int rows, int cols, int density)
         {
             Random random = new Random();
             this.rows = rows;
             this.cols = cols;
-            var hasLife = false;
             field = new Cell[cols, rows];
             for (int x = 0; x < cols; x++)
             {
                 for (int y = 0; y < rows; y++)
-                {
-                    hasLife = random.Next(density) == 0;
+                {                   
                     field[x, y] = new Cell(cols, rows);
-                    if (hasLife)
-                    {                                              
-                        Human rand = new Human(x, y,random);                       
+                    if (random.Next(density) == 0)
+                    {
+                        Herbivore rand = new Herbivore(x, y,random);                       
                         field[x, y].humans.Add(rand);
-                        TotalOfHumans++;
+                        TotalOfHerbivores++;
+                    }
+                    if (random.Next(density) == 0)
+                    {
+                        Predator rand = new Predator(x, y, random);
+                        field[x, y].predators.Add(rand);
+                        TotalOfPredators++;
                     }
                     if (random.Next(200) == 0)
                     {                        
@@ -50,26 +62,57 @@ namespace LifeS
         {
             StartEvent();
             CurrentGeneration++;
-            TotalOfHumans = 0;
+            TotalOfHerbivores = 0;
+            TotalOfPredators = 0;
             for (int x = 0; x < cols; x++)
             {
                 for (int y = 0; y < rows; y++)
                 {                    
                     CreateRandomPlant(x, y, random);
                     UpdatePlantsInfo(x, y);
+                    if (field[x, y].predators.Count > 0)
+                    {
+                        UpdatePredatorsInfo(x, y);
+                        List<Predator> rem1 = new List<Predator>();
+                        List<Predator> add1 = new List<Predator>();
+                        foreach (Predator p in field[x, y].predators)//движение
+                        {
+                            if (!p.changed)
+                            {
+                                TotalOfPredators++;
+                                p.DoSomething(field.GetLength(0), field.GetLength(1), field);
+                                add1.Add(p);
 
+                            }
+                            else
+                            {
+                                rem1.Add(p);
+
+                            }
+                        }
+                        field[x, y].predators = rem1;
+
+                        foreach (Predator p in add1)
+                        {
+                            field[p.x, p.y].predators.Add(p);
+                        }
+
+                        field[x, y].predators.AddRange(field[x, y].pchilds);
+                        field[x, y].pchilds.Clear();
+                    }
                     if (field[x, y].humans.Count() > 0)
                     {
-                        
-                        UpdateHumansInfo(x, y);                       
 
-                        List<Human> rem = new List<Human>();
-                        List<Human> add = new List<Human>();
-                        foreach (Human h in field[x, y].humans)//движение
+                        UpdateHerbivoresInfo(x, y);
+                        
+
+                        List<Herbivore> rem = new List<Herbivore>();
+                        List<Herbivore> add = new List<Herbivore>();
+                        foreach (Herbivore h in field[x, y].humans)//движение
                         {
                             if (!h.changed)
                             {
-                                TotalOfHumans++;
+                                TotalOfHerbivores++;
                                 h.DoSomething(field.GetLength(0), field.GetLength(1), field);
                                 add.Add(h);
 
@@ -80,30 +123,34 @@ namespace LifeS
                                
                             }
                         }
+
+                        
+
                         field[x, y].humans = rem;
                         
-                        foreach (Human h in add)
+                        foreach (Herbivore h in add)
                         {
                             field[h.x, h.y].humans.Add(h);
                         }
+                       
+
                         field[x, y].humans.AddRange(field[x, y].childs);
                         field[x, y].childs.Clear();
+                        
                     }
                     
                 }
             }
 
-            
-            
-           
-
             CheckedToFalse();
             return field;
 
         }
-        public Human GetHuman(int _x, int _y)
-        {       
-            if(field[_x, _y].humans.Count>0 )
+        public Animal GetHuman(int _x, int _y)
+        {
+            if (field[_x, _y].predators.Count > 0)
+                return field[_x, _y].predators[0];
+            else if(field[_x, _y].humans.Count>0 )
                 return field[_x, _y].humans[0];            
             return null;
         }
@@ -115,7 +162,14 @@ namespace LifeS
                 {
                     if (field[x, y].humans.Count() > 0)
                     {
-                        foreach (Human b in field[x, y].humans)
+                        foreach (Herbivore b in field[x, y].humans)
+                        {
+                            b.changed = false;
+                        }
+                    }
+                    if (field[x, y].predators.Count() > 0)
+                    {
+                        foreach (Predator b in field[x, y].predators)
                         {
                             b.changed = false;
                         }
@@ -161,10 +215,10 @@ namespace LifeS
                     field[x, y].plant=null;
             }
         }
-        private void UpdateHumansInfo(int x, int y)
+        private void UpdateHerbivoresInfo(int x, int y)
         {
-            List<Human> checkAliveHumans = new List<Human>();
-            foreach (Human h in field[x, y].humans)
+            List<Herbivore> checkAliveHumans = new List<Herbivore>();
+            foreach (Herbivore h in field[x, y].humans)
             {
                 if (h.satiety == 0)
                     h.Dead();
@@ -176,6 +230,22 @@ namespace LifeS
             }
 
             field[x, y].humans = checkAliveHumans;
+        }
+        private void UpdatePredatorsInfo(int x, int y)
+        {
+            List<Predator> checkAliveHumans = new List<Predator>();
+            foreach (Predator h in field[x, y].predators)
+            {
+                if (h.satiety == 0)
+                    h.Dead();
+                if (h.alive)
+                {
+                    checkAliveHumans.Add(h);
+                }
+
+            }
+
+            field[x, y].predators = checkAliveHumans;
         }
 
         private void StartEvent()

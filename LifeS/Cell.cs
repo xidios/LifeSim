@@ -10,9 +10,11 @@ namespace LifeS
     {
         public int x;
         public int y;
-        public List<Human> humans = new List<Human>();
+        public List<Herbivore> humans = new List<Herbivore>();
         public Plant plant = null;
-        public List<Human> childs = new List<Human>();        
+        public List<Herbivore> childs = new List<Herbivore>();
+        public List<Predator> predators = new List<Predator>();
+        public List<Predator> pchilds = new List<Predator>();
 
 
 

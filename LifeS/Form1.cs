@@ -19,7 +19,7 @@ namespace LifeS
         int sizeOfCell;
         int rows=3000;
         int cols=3000;
-        private Human observedHuman = null;
+        private Animal observedHuman = null;
 
         public Form1()
         {
@@ -63,19 +63,27 @@ namespace LifeS
             {
                 for (int y = 0; y < field.GetLength(1); y++)
                 {
+                    
                     if (field[x, y].plant!=null && field[x, y].plant.alive)
                     {
                         graphics.FillRectangle(Brushes.Green, x * resolution, y * resolution, resolution, resolution);
 
                     }
+
                     if (field[x, y].humans.Count() > 0 && field[x, y].humans[0].gender == Gender.female)
                     {
                         graphics.FillRectangle(Brushes.IndianRed, x * resolution, y * resolution, resolution, resolution);
                     }
+
                     if (field[x, y].humans.Count() > 0 && field[x, y].humans[0].gender==Gender.male)
                     {
                         graphics.FillRectangle(Brushes.Moccasin, x * resolution, y * resolution, resolution, resolution);
                         
+                    }
+
+                    if (field[x, y].predators.Count > 0)
+                    {
+                        graphics.FillRectangle(Brushes.Red, x * resolution, y * resolution, resolution, resolution);
                     }
                     if(observedHuman != null)
                     {
@@ -112,7 +120,8 @@ namespace LifeS
             }
 
             Text = $"Generation {gameEngine.CurrentGeneration}";
-            TotalHuman.Text = $"Total of humans: {gameEngine.TotalOfHumans}";
+            TotalHuman.Text = $"Total of herbivore: {gameEngine.TotalOfHerbivores}";
+            totalOfPredators.Text = $"Total of predators: {gameEngine.TotalOfPredators}";
            
 
             pictureBox1.Refresh();

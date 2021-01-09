@@ -46,8 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="entities\animals\Animal.cs" />
     <Compile Include="Cell.cs" />
-    <Compile Include="Direction.cs" />
+    <Compile Include="entities\animals\Omnivore.cs" />
+    <Compile Include="entities\animals\Predator.cs" />
+    <Compile Include="entities\Entity.cs" />
+    <Compile Include="enums\Direction.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -55,10 +59,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gender.cs" />
-    <Compile Include="Human.cs" />
+    <Compile Include="enums\Gender.cs" />
+    <Compile Include="entities\animals\Herbivore.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="Plant.cs" />
+    <Compile Include="entities\plants\Plant.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

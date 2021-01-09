@@ -36,7 +36,7 @@ namespace LifeS
             {
                 if (field[x, y].humans.Count > 0)
                 {
-                    foreach (Human h in field[x, y].humans)
+                    foreach (Herbivore h in field[x, y].humans)
                     {
                         h.Dead();
                     }

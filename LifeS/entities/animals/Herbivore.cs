@@ -7,33 +7,15 @@ using System.Threading.Tasks;
 namespace LifeS
 {
       
-    public class Human
+    public class Herbivore : Animal
     {
-
-        public int satiety = 100;
-        public int x;
-        public int y;
-        public bool changed = false;
-        public bool alive;
-        public int timeLastChild = 100;
-        private int viewDistance = 30;
-        public Gender gender;
-        
-        Random random;
-
-
-        public Human(int _x, int _y,Random rand)
+        private Random random;
+        public int viewDistance = 30;
+        public Herbivore(int _x, int _y, Random rand) : base (_x,_y,rand)
         {
-            x = _x;
-            y = _y;
             random = rand;
-            alive = true;
-
-            if (rand.Next(2) == 0)
-                gender = Gender.male;
-            else
-                gender = Gender.female;
         }
+
         public void DoSomething(int _x, int _y, Cell[,] field)
         {
 
@@ -42,73 +24,19 @@ namespace LifeS
                 SearchFood(field);
 
             }
-            else if (satiety >= 70 && timeLastChild==0)
+            else if (satiety >= 70 && timeLastChild == 0)
             {
                 SearchPartner(field);
-                
+
             }
             else
             {
                 MoveRandom(_x, _y);
             }
-            
-            if(timeLastChild>0)
+
+            if (timeLastChild > 0)
                 timeLastChild--;
         }
-        public void MoveRandom(int xSize, int ySize)
-        {
-            Direction direction = (Direction)random.Next(5);
-            Move(xSize, ySize,direction);
-        }
-        public void PanicMove(int xSize, int ySize)
-        {
-            Direction direction = (Direction)random.Next(4);
-            Move(xSize, ySize, direction);
-        }
-        private void Move(int xSize, int ySize, Direction direction)
-        {
-
-            switch (direction)
-            {
-                case Direction.left:
-                    if (x - 1 >= 0)
-                    {
-                        x--;
-                        changed = true;
-                    }
-
-                    break;
-                case Direction.up:
-                    if (y - 1 >= 0)
-                    {
-                        y--;
-                        changed = true;
-                    }
-                    break;
-                case Direction.right:
-                    if (x + 1 < xSize)
-                    {
-                        x++;
-                        changed = true;
-                    }
-                    break;
-                case Direction.down:
-                    if (y + 1 < ySize)
-                    {
-                        y++;
-                        changed = true;
-                    }
-                    break;
-                case Direction.none:
-                    break;                   
-            }
-            satiety--;
-        }
-
-
-
-
-
 
         private void EatPlant(int _x, int _y,Cell[,] field)
         {
@@ -124,13 +52,6 @@ namespace LifeS
 
 
 
-
-
-        public void Dead()
-        {           
-            
-                alive = false;           
-        }
         private void SearchFood(Cell[,] field)
         {
             Direction direction = Direction.none;
@@ -140,7 +61,7 @@ namespace LifeS
             {
                 if (x - v >= 0)
                 {
-                    if (field[x - v, y].plant != null )
+                    if (field[x - v, y].plant != null)
                     {
                         direction = Direction.left;
                         distance = v;
@@ -203,18 +124,18 @@ namespace LifeS
             Direction direction = Direction.none;
             int distance=viewDistance;
 
-            Human thuman = null;
+            Herbivore therbivore = null;
             for (int v = 0; v < viewDistance; v++)
             {
                 if (x - v >= 0)
                 {
                     if (field[x - v, y].humans != null)
                     {
-                        foreach (Human hum in field[x - v, y].humans)
+                        foreach (Herbivore hum in field[x - v, y].humans)
                         {
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                thuman = hum;
+                                therbivore = hum;
                                 direction = Direction.left;
                                 distance = v;
                                 v = viewDistance;
@@ -229,11 +150,11 @@ namespace LifeS
                 {
                     if (field[x, y - v].humans != null)
                     {
-                        foreach (Human hum in field[x, y - v].humans)
+                        foreach (Herbivore hum in field[x, y - v].humans)
                         {
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                thuman = hum;
+                                therbivore = hum;
                                 direction = Direction.up;
                                 distance = v;
                                 v = viewDistance;
@@ -249,11 +170,11 @@ namespace LifeS
                 {
                     if (field[x + v, y].humans != null)
                     {
-                        foreach (Human hum in field[x + v, y].humans)
+                        foreach (Herbivore hum in field[x + v, y].humans)
                         {
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                thuman = hum;
+                                therbivore = hum;
                                 direction = Direction.right;
                                 distance = v;
                                 v = viewDistance;
@@ -269,11 +190,11 @@ namespace LifeS
                 {
                     if (field[x, y + v].humans != null)
                     {
-                        foreach (Human hum in field[x, y + v].humans)
+                        foreach (Herbivore hum in field[x, y + v].humans)
                         {
                             if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                thuman = hum;
+                                therbivore = hum;
                                 direction = Direction.down;
                                 distance = v;
                                 v = viewDistance;
@@ -286,9 +207,9 @@ namespace LifeS
             }
 
 
-            if (distance==0&& thuman!=null)
+            if (distance==0&& therbivore != null)
             {
-                DoChild(x, y, field,thuman);
+                DoChild(x, y, field, therbivore);
             }
             else
             {
@@ -300,14 +221,9 @@ namespace LifeS
             }
         }
 
-        private void MoveForTarget(int left,int right,int up,int down,Direction direction)
+        private void DoChild(int _x, int _y, Cell[,] field, Herbivore h)
         {
-
-        }
-
-        private void DoChild(int _x, int _y, Cell[,] field,Human h)
-        {
-            Human c = new Human(_x,_y,random);
+            Herbivore c = new Herbivore(_x,_y,random);
             c.changed = false;
             field[_x, _y].childs.Add(c);
             h.timeLastChild = 150;

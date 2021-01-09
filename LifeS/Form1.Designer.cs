@@ -46,6 +46,7 @@ namespace LifeS
             this.listView1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.totalOfPredators = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -65,6 +66,7 @@ namespace LifeS
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.totalOfPredators);
             this.splitContainer1.Panel1.Controls.Add(this.sex);
             this.splitContainer1.Panel1.Controls.Add(this.labelTimeChild);
             this.splitContainer1.Panel1.Controls.Add(this.status);
@@ -89,7 +91,7 @@ namespace LifeS
             // sex
             // 
             this.sex.AutoSize = true;
-            this.sex.Location = new System.Drawing.Point(49, 351);
+            this.sex.Location = new System.Drawing.Point(49, 367);
             this.sex.Name = "sex";
             this.sex.Size = new System.Drawing.Size(25, 13);
             this.sex.TabIndex = 17;
@@ -98,7 +100,7 @@ namespace LifeS
             // labelTimeChild
             // 
             this.labelTimeChild.AutoSize = true;
-            this.labelTimeChild.Location = new System.Drawing.Point(49, 364);
+            this.labelTimeChild.Location = new System.Drawing.Point(49, 380);
             this.labelTimeChild.Name = "labelTimeChild";
             this.labelTimeChild.Size = new System.Drawing.Size(97, 13);
             this.labelTimeChild.TabIndex = 16;
@@ -107,7 +109,7 @@ namespace LifeS
             // status
             // 
             this.status.AutoSize = true;
-            this.status.Location = new System.Drawing.Point(49, 398);
+            this.status.Location = new System.Drawing.Point(49, 403);
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(37, 13);
             this.status.TabIndex = 14;
@@ -116,7 +118,7 @@ namespace LifeS
             // humanSatiety
             // 
             this.humanSatiety.AutoSize = true;
-            this.humanSatiety.Location = new System.Drawing.Point(49, 338);
+            this.humanSatiety.Location = new System.Drawing.Point(49, 354);
             this.humanSatiety.Name = "humanSatiety";
             this.humanSatiety.Size = new System.Drawing.Size(86, 13);
             this.humanSatiety.TabIndex = 13;
@@ -125,7 +127,7 @@ namespace LifeS
             // TotalHuman
             // 
             this.TotalHuman.AutoSize = true;
-            this.TotalHuman.Location = new System.Drawing.Point(49, 325);
+            this.TotalHuman.Location = new System.Drawing.Point(49, 330);
             this.TotalHuman.Name = "TotalHuman";
             this.TotalHuman.Size = new System.Drawing.Size(81, 13);
             this.TotalHuman.TabIndex = 9;
@@ -217,7 +219,7 @@ namespace LifeS
             // listView1
             // 
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(39, 293);
+            this.listView1.Location = new System.Drawing.Point(39, 298);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(148, 139);
             this.listView1.TabIndex = 12;
@@ -237,6 +239,15 @@ namespace LifeS
             // 
             this.timer1.Interval = 150;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // totalOfPredators
+            // 
+            this.totalOfPredators.AutoSize = true;
+            this.totalOfPredators.Location = new System.Drawing.Point(49, 343);
+            this.totalOfPredators.Name = "totalOfPredators";
+            this.totalOfPredators.Size = new System.Drawing.Size(87, 13);
+            this.totalOfPredators.TabIndex = 18;
+            this.totalOfPredators.Text = "TotalOfPredators";
             // 
             // Form1
             // 
@@ -277,6 +288,7 @@ namespace LifeS
         private System.Windows.Forms.Label labelTimeChild;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label sex;
+        private System.Windows.Forms.Label totalOfPredators;
     }
 }
 
