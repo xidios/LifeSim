@@ -75,6 +75,8 @@ namespace LifeS
             }
             satiety--;
         }
-        
+        public abstract void DoSomething(int _x, int _y, Cell[,] field);
+
+
     }
 }

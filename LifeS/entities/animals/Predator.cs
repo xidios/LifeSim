@@ -15,7 +15,7 @@ namespace LifeS
             random = rand;
         }
 
-        public void DoSomething(int _x, int _y, Cell[,] field)
+        public override void DoSomething(int _x, int _y, Cell[,] field)
         {
 
             if (satiety <= 50)
@@ -38,13 +38,10 @@ namespace LifeS
         }
 
 
-        private void EatHerbivore(int _x, int _y, Cell[,] field)
+        private void EatHerbivore(int _x, int _y, Herbivore h)
         {
-            if (field[_x, _y].humans.Count>0 && field[_x, _y].humans[0].alive)
-            {
                 satiety += 70;
-                field[_x, _y].humans[0].Dead();
-            }
+                h.Dead();           
         }
 
 
@@ -53,63 +50,94 @@ namespace LifeS
         {
             Direction direction = Direction.none;
             int distance = viewDistance;
+            Herbivore at = null;
 
             for (int v = 0; v < viewDistance; v++)
             {
                 if (x - v >= 0)
                 {
-                    if (field[x - v, y].humans.Count > 0)
+                    if (field[x - v, y].animals.Count > 0)
                     {
-                        direction = Direction.left;
-                        distance = v;
+                        foreach (Animal a in field[x-v, y].animals)
+                        {
+                            if(a is Herbivore)
+                            {
+                                at = (Herbivore)a;
+                                direction = Direction.left;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if(at!=null)
                         break;
                     }
                 }
                 if (y - v >= 0)
                 {
-                    if (field[x, y - v].humans.Count > 0)
+                    if (field[x, y-v].animals.Count > 0)
                     {
-                        direction = Direction.up;
-                        distance = v;
-                        break;
+                        foreach (Animal a in field[x, y-v].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                at = (Herbivore)a;
+                                direction = Direction.up;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (at != null)
+                            break;
                     }
                 }
                 if (x + v < field.GetLength(0))
                 {
-                    if (field[x + v, y].humans.Count > 0)
+                    if (field[x+v, y].animals.Count > 0)
                     {
-                        direction = Direction.right;
-                        distance = v;
-                        break;
+                        foreach (Animal a in field[x+v, y].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                at = (Herbivore)a;
+                                direction = Direction.right;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (at != null)
+                            break;
                     }
                 }
                 if (y + v < field.GetLength(1))
                 {
-                    if (field[x, y + v].humans.Count>0)
+                    if (field[x, y+v].animals.Count > 0)
                     {
-                        direction = Direction.down;
-                        distance = v;
-                        break;
+                        foreach (Animal a in field[x, y+v].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                at = (Herbivore)a;
+                                direction = Direction.down;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (at != null)
+                            break;
                     }
                 }
             }
 
 
-
-
-
-            if (distance == 0)
+            if (at != null && distance == 0)
             {
-                EatHerbivore(x, y, field);
-
+                EatHerbivore(x, y, at);
             }
-            else
-            {
-                if (direction == Direction.none)
+            else {
+               if (direction == Direction.none)
                     PanicMove(field.GetLength(0), field.GetLength(1));
                 else
                     Move(field.GetLength(0), field.GetLength(1), direction);
-
             }
 
 
@@ -126,13 +154,13 @@ namespace LifeS
             {
                 if (x - v >= 0)
                 {
-                    if (field[x - v, y].humans != null)
+                    if (field[x - v, y].animals != null)
                     {
-                        foreach (Predator p in field[x - v, y].predators)
+                        foreach (Animal p in field[x - v, y].animals)
                         {
-                            if (p.gender != gender && p.satiety >= 50 && p.timeLastChild == 0)
+                            if (p is Predator&& p.gender != gender && p.satiety >= 50 && p.timeLastChild == 0)
                             {
-                                tpredator = p;
+                                tpredator = (Predator)p;
                                 direction = Direction.left;
                                 distance = v;
                                 v = viewDistance;
@@ -145,13 +173,13 @@ namespace LifeS
                 }
                 if (y - v >= 0)
                 {
-                    if (field[x, y - v].humans != null)
+                    if (field[x, y - v].animals != null)
                     {
-                        foreach (Predator hum in field[x, y - v].predators)
+                        foreach (Animal hum in field[x, y - v].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Predator && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                tpredator = hum;
+                                tpredator = (Predator)hum;
                                 direction = Direction.up;
                                 distance = v;
                                 v = viewDistance;
@@ -165,13 +193,13 @@ namespace LifeS
                 }
                 if (x + v < field.GetLength(0))
                 {
-                    if (field[x + v, y].humans != null)
+                    if (field[x + v, y].animals != null)
                     {
-                        foreach (Predator hum in field[x + v, y].predators)
+                        foreach (Animal hum in field[x + v, y].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Predator && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                tpredator = hum;
+                                tpredator = (Predator)hum;
                                 direction = Direction.right;
                                 distance = v;
                                 v = viewDistance;
@@ -185,13 +213,13 @@ namespace LifeS
                 }
                 if (y + v < field.GetLength(1))
                 {
-                    if (field[x, y + v].humans != null)
+                    if (field[x, y + v].animals != null)
                     {
-                        foreach (Predator hum in field[x, y + v].predators)
+                        foreach (Animal hum in field[x, y + v].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Predator && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                tpredator = hum;
+                                tpredator = (Predator)hum;
                                 direction = Direction.down;
                                 distance = v;
                                 v = viewDistance;
@@ -223,7 +251,7 @@ namespace LifeS
         {
             Predator c = new Predator(_x, _y, random);
             c.changed = false;
-            field[_x, _y].pchilds.Add(c);
+            field[_x, _y].achilds.Add(c);
             h.timeLastChild = 150;
             timeLastChild = 200;
         }

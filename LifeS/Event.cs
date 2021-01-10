@@ -34,9 +34,9 @@ namespace LifeS
 
             if (x < field.GetLength(0) && x >= 0 && y >= 0 && y < field.GetLength(1))
             {
-                if (field[x, y].humans.Count > 0)
+                if (field[x, y].animals.Count > 0)
                 {
-                    foreach (Herbivore h in field[x, y].humans)
+                    foreach (Animal h in field[x, y].animals)
                     {
                         h.Dead();
                     }

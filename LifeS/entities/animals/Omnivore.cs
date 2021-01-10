@@ -15,7 +15,7 @@ namespace LifeS
             random = rand;
         }
 
-        public void DoSomething(int _x, int _y, Cell[,] field)
+        public override void  DoSomething(int _x, int _y, Cell[,] field)
         {
 
             if (satiety <= 50)
@@ -38,18 +38,17 @@ namespace LifeS
         }
 
 
-        public void EatSmth(int _x, int _y, Cell[,] field)
+        public void EatSmth(int _x, int _y, Entity en)
         {
-            if (field[_x, _y].plant != null && field[_x, _y].plant.alive)
+            if (en is Plant)
             {
                 satiety += 50;
-                field[_x, _y].plant.Dead();
-                return;
+                en.Dead();
             }
-            if (field[_x, _y].humans.Count > 0 && field[_x, _y].humans[0].alive)
+            else
             {
                 satiety += 70;
-                field[_x, _y].humans[0].Dead();
+                en.Dead();
             }
         }
         
@@ -59,43 +58,111 @@ namespace LifeS
         {
             Direction direction = Direction.none;
             int distance = viewDistance;
+            Entity en = null;
 
             for (int v = 0; v < viewDistance; v++)
             {
                 if (x - v >= 0)
                 {
-                    if (field[x - v, y].humans.Count > 0 || field[x - v, y].plant!=null)
+                    if (field[x - v, y].plant != null)
                     {
+                        en = field[x - v, y].plant;
                         direction = Direction.left;
                         distance = v;
                         break;
                     }
+                    if (field[x - v, y].animals.Count > 0)
+                    {
+                        foreach (Animal a in field[x - v, y].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                en = (Herbivore)a;
+                                direction = Direction.left;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (en != null)
+                            break;
+                    }
+
                 }
+
                 if (y - v >= 0)
                 {
-                    if (field[x, y - v].humans.Count > 0|| field[x, y - v].plant!=null)
+                    if (field[x, y-v].plant != null)
                     {
+                        en = field[x , y-v].plant;
                         direction = Direction.up;
                         distance = v;
                         break;
                     }
+                    if (field[x , y-v].animals.Count > 0)
+                    {
+                        foreach (Animal a in field[x , y-v].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                en = (Herbivore)a;
+                                direction = Direction.up;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (en != null)
+                            break;
+                    }
                 }
+
                 if (x + v < field.GetLength(0))
                 {
-                    if (field[x + v, y].humans.Count > 0 || field[x + v, y].plant!=null)
+                    if (field[x + v, y].plant != null)
                     {
+                        en = field[x + v, y].plant;
                         direction = Direction.right;
                         distance = v;
                         break;
                     }
+                    if (field[x + v, y].animals.Count > 0)
+                    {
+                        foreach (Animal a in field[x + v, y].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                en = (Herbivore)a;
+                                direction = Direction.right;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (en != null)
+                            break;
+                    }
                 }
                 if (y + v < field.GetLength(1))
                 {
-                    if (field[x, y + v].humans.Count > 0 || field[x, y+v].plant != null)
+                    if (field[x, y + v].plant != null)
                     {
+                        en = field[x, y + v].plant;
                         direction = Direction.down;
                         distance = v;
                         break;
+                    }
+                    if (field[x, y + v].animals.Count > 0)
+                    {
+                        foreach (Animal a in field[x, y + v].animals)
+                        {
+                            if (a is Herbivore)
+                            {
+                                en = (Herbivore)a;
+                                direction = Direction.down;
+                                distance = v;
+                                break;
+                            }
+                        }
+                        if (en != null)
+                            break;
                     }
                 }
             }
@@ -106,7 +173,7 @@ namespace LifeS
 
             if (distance == 0)
             {
-                EatSmth(x, y, field);
+                EatSmth(x, y, en);
 
             }
             else
@@ -132,17 +199,20 @@ namespace LifeS
             {
                 if (x - v >= 0)
                 {
-                    if (field[x - v, y].humans != null)
+                    if (field[x - v, y].animals != null)
                     {
-                        foreach (Omnivore p in field[x - v, y].omnivores)
+                        foreach (Animal p in field[x - v, y].animals)
                         {
-                            if (p.gender != gender && p.satiety >= 50 && p.timeLastChild == 0)
+                            if (p is Omnivore)
                             {
-                                tomnivore = p;
-                                direction = Direction.left;
-                                distance = v;
-                                v = viewDistance;
-                                break;
+                                if (p.gender != gender && p.satiety >= 50 && p.timeLastChild == 0)
+                                {
+                                    tomnivore = (Omnivore)p;
+                                    direction = Direction.left;
+                                    distance = v;
+                                    v = viewDistance;
+                                    break;
+                                }
                             }
 
                         }
@@ -151,17 +221,20 @@ namespace LifeS
                 }
                 if (y - v >= 0)
                 {
-                    if (field[x, y - v].humans != null)
+                    if (field[x, y - v].animals != null)
                     {
-                        foreach (Omnivore hum in field[x, y - v].omnivores)
+                        foreach (Animal hum in field[x, y - v].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Omnivore)
                             {
-                                tomnivore = hum;
-                                direction = Direction.up;
-                                distance = v;
-                                v = viewDistance;
-                                break;
+                                if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                                {
+                                    tomnivore = (Omnivore)hum;
+                                    direction = Direction.up;
+                                    distance = v;
+                                    v = viewDistance;
+                                    break;
+                                }
                             }
 
                         }
@@ -171,17 +244,20 @@ namespace LifeS
                 }
                 if (x + v < field.GetLength(0))
                 {
-                    if (field[x + v, y].humans != null)
+                    if (field[x + v, y].animals != null)
                     {
-                        foreach (Omnivore hum in field[x + v, y].omnivores)
+                        foreach (Animal hum in field[x + v, y].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Omnivore)
                             {
-                                tomnivore = hum;
-                                direction = Direction.right;
-                                distance = v;
-                                v = viewDistance;
-                                break;
+                                if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                                {
+                                    tomnivore = (Omnivore)hum;
+                                    direction = Direction.right;
+                                    distance = v;
+                                    v = viewDistance;
+                                    break;
+                                }
                             }
 
                         }
@@ -191,17 +267,20 @@ namespace LifeS
                 }
                 if (y + v < field.GetLength(1))
                 {
-                    if (field[x, y + v].humans != null)
+                    if (field[x, y + v].animals != null)
                     {
-                        foreach (Omnivore hum in field[x, y + v].omnivores)
+                        foreach (Animal hum in field[x, y + v].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Omnivore)
                             {
-                                tomnivore = hum;
-                                direction = Direction.down;
-                                distance = v;
-                                v = viewDistance;
-                                break;
+                                if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                                {
+                                    tomnivore = (Omnivore)hum;
+                                    direction = Direction.down;
+                                    distance = v;
+                                    v = viewDistance;
+                                    break;
+                                }
                             }
 
                         }
@@ -229,7 +308,7 @@ namespace LifeS
         {
             Omnivore o = new Omnivore(_x, _y, random);
             o.changed = false;
-            field[_x, _y].ochilds.Add(o);
+            field[_x, _y].achilds.Add(o);
             h.timeLastChild = 150;
             timeLastChild = 200;
         }

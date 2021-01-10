@@ -16,7 +16,7 @@ namespace LifeS
             random = rand;
         }
 
-        public void DoSomething(int _x, int _y, Cell[,] field)
+        public override void DoSomething(int _x, int _y, Cell[,] field)
         {
 
             if (satiety <= 50)
@@ -127,13 +127,13 @@ namespace LifeS
             {
                 if (x - v >= 0)
                 {
-                    if (field[x - v, y].humans != null)
+                    if (field[x - v, y].animals != null)
                     {
-                        foreach (Herbivore hum in field[x - v, y].humans)
+                        foreach (Animal hum in field[x - v, y].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                therbivore = hum;
+                                therbivore = (Herbivore)hum;
                                 direction = Direction.left;
                                 distance = v;
                                 v = viewDistance;
@@ -146,13 +146,13 @@ namespace LifeS
                 }
                 if (y - v >= 0)
                 {
-                    if (field[x, y - v].humans != null)
+                    if (field[x, y - v].animals != null)
                     {
-                        foreach (Herbivore hum in field[x, y - v].humans)
+                        foreach (Animal hum in field[x, y - v].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                therbivore = hum;
+                                therbivore = (Herbivore)hum;
                                 direction = Direction.up;
                                 distance = v;
                                 v = viewDistance;
@@ -166,13 +166,13 @@ namespace LifeS
                 }
                 if (x + v < field.GetLength(0))
                 {
-                    if (field[x + v, y].humans != null)
+                    if (field[x + v, y].animals != null)
                     {
-                        foreach (Herbivore hum in field[x + v, y].humans)
+                        foreach (Animal hum in field[x + v, y].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                therbivore = hum;
+                                therbivore = (Herbivore)hum;
                                 direction = Direction.right;
                                 distance = v;
                                 v = viewDistance;
@@ -186,13 +186,13 @@ namespace LifeS
                 }
                 if (y + v < field.GetLength(1))
                 {
-                    if (field[x, y + v].humans != null)
+                    if (field[x, y + v].animals != null)
                     {
-                        foreach (Herbivore hum in field[x, y + v].humans)
+                        foreach (Animal hum in field[x, y + v].animals)
                         {
-                            if (hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
+                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
                             {
-                                therbivore = hum;
+                                therbivore = (Herbivore)hum;
                                 direction = Direction.down;
                                 distance = v;
                                 v = viewDistance;
@@ -223,7 +223,7 @@ namespace LifeS
         {
             Herbivore c = new Herbivore(_x,_y,random);
             c.changed = false;
-            field[_x, _y].childs.Add(c);
+            field[_x, _y].achilds.Add(c);
             h.timeLastChild = 150;
             timeLastChild = 200;
         }

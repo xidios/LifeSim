@@ -70,33 +70,33 @@ namespace LifeS
 
                     }
 
-                    if (field[x, y].humans.Count() > 0)
+                    if (field[x, y].animals.Count() > 0)
                     {
-                        if (field[x, y].humans[0].gender == Gender.female)
-                            graphics.FillRectangle(Brushes.Coral, x * resolution, y * resolution, resolution, resolution);
-                        else graphics.FillRectangle(Brushes.Moccasin, x * resolution, y * resolution, resolution, resolution);
-                    }
-
-
-                    if (field[x, y].predators.Count > 0)
-                    {
-                        if (field[x, y].predators[0].gender == Gender.female)
-                            graphics.FillRectangle(Brushes.DeepPink, x * resolution, y * resolution, resolution, resolution);
-                        else
-                            graphics.FillRectangle(Brushes.Plum, x * resolution, y * resolution, resolution, resolution);
-                    }
-                    if (field[x, y].omnivores.Count > 0)
-                    {
-                        if (field[x, y].omnivores[0].gender == Gender.female)
-                            graphics.FillRectangle(Brushes.Azure, x * resolution, y * resolution, resolution, resolution);
-                        else
-                            graphics.FillRectangle(Brushes.LightGray, x * resolution, y * resolution, resolution, resolution);
+                        if (field[x, y].animals[0] is Herbivore)
+                        {
+                            if (field[x, y].animals[0].gender == Gender.female)
+                                graphics.FillRectangle(Brushes.Coral, x * resolution, y * resolution, resolution, resolution);
+                            else graphics.FillRectangle(Brushes.Moccasin, x * resolution, y * resolution, resolution, resolution);
+                        }
+                        else if (field[x, y].animals[0] is Predator)
+                        {
+                            if (field[x, y].animals[0].gender == Gender.female)
+                                graphics.FillRectangle(Brushes.DeepPink, x * resolution, y * resolution, resolution, resolution);
+                            else
+                                graphics.FillRectangle(Brushes.Plum, x * resolution, y * resolution, resolution, resolution);
+                        }
+                        else if (field[x, y].animals[0] is Omnivore)
+                        {
+                            if (field[x, y].animals[0].gender == Gender.female)
+                                graphics.FillRectangle(Brushes.Azure, x * resolution, y * resolution, resolution, resolution);
+                            else
+                                graphics.FillRectangle(Brushes.LightGray, x * resolution, y * resolution, resolution, resolution);
+                        }
                     }
                     if (observedHuman != null)
                     {
                         graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
                     }
-
 
                 }
             }
@@ -129,7 +129,7 @@ namespace LifeS
             Text = $"Generation {gameEngine.CurrentGeneration}";
             TotalHuman.Text = $"Total of herbivore: {gameEngine.TotalOfHerbivores}";
             totalOfPredators.Text = $"Total of predators: {gameEngine.TotalOfPredators}";
-            totalOfOmnivores.Text = $"Total of omnivores: {gameEngine.TotalOfOmnivores}";
+            totalOfOmnivores.Text = $"Total of omnivores: {gameEngine.TotalOfAnimals}";
 
 
             pictureBox1.Refresh();
