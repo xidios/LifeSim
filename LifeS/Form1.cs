@@ -63,34 +63,41 @@ namespace LifeS
             {
                 for (int y = 0; y < field.GetLength(1); y++)
                 {
-                    
-                    if (field[x, y].plant!=null && field[x, y].plant.alive)
+
+                    if (field[x, y].plant != null && field[x, y].plant.alive)
                     {
                         graphics.FillRectangle(Brushes.Green, x * resolution, y * resolution, resolution, resolution);
 
                     }
 
-                    if (field[x, y].humans.Count() > 0 && field[x, y].humans[0].gender == Gender.female)
+                    if (field[x, y].humans.Count() > 0)
                     {
-                        graphics.FillRectangle(Brushes.IndianRed, x * resolution, y * resolution, resolution, resolution);
+                        if (field[x, y].humans[0].gender == Gender.female)
+                            graphics.FillRectangle(Brushes.Coral, x * resolution, y * resolution, resolution, resolution);
+                        else graphics.FillRectangle(Brushes.Moccasin, x * resolution, y * resolution, resolution, resolution);
                     }
 
-                    if (field[x, y].humans.Count() > 0 && field[x, y].humans[0].gender==Gender.male)
-                    {
-                        graphics.FillRectangle(Brushes.Moccasin, x * resolution, y * resolution, resolution, resolution);
-                        
-                    }
 
                     if (field[x, y].predators.Count > 0)
                     {
-                        graphics.FillRectangle(Brushes.Red, x * resolution, y * resolution, resolution, resolution);
+                        if (field[x, y].predators[0].gender == Gender.female)
+                            graphics.FillRectangle(Brushes.DeepPink, x * resolution, y * resolution, resolution, resolution);
+                        else
+                            graphics.FillRectangle(Brushes.Plum, x * resolution, y * resolution, resolution, resolution);
                     }
-                    if(observedHuman != null)
+                    if (field[x, y].omnivores.Count > 0)
+                    {
+                        if (field[x, y].omnivores[0].gender == Gender.female)
+                            graphics.FillRectangle(Brushes.Azure, x * resolution, y * resolution, resolution, resolution);
+                        else
+                            graphics.FillRectangle(Brushes.LightGray, x * resolution, y * resolution, resolution, resolution);
+                    }
+                    if (observedHuman != null)
                     {
                         graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
                     }
-                    
-                    
+
+
                 }
             }
             if (gameEngine.mapEvents != null)
@@ -122,7 +129,8 @@ namespace LifeS
             Text = $"Generation {gameEngine.CurrentGeneration}";
             TotalHuman.Text = $"Total of herbivore: {gameEngine.TotalOfHerbivores}";
             totalOfPredators.Text = $"Total of predators: {gameEngine.TotalOfPredators}";
-           
+            totalOfOmnivores.Text = $"Total of omnivores: {gameEngine.TotalOfOmnivores}";
+
 
             pictureBox1.Refresh();
         }

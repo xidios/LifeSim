@@ -25,6 +25,7 @@ namespace LifeS
         public int CurrentGeneration { get; private set; }
         public int TotalOfHerbivores { get; private set; }
         public int TotalOfPredators { get; private set; }
+        public int TotalOfOmnivores { get; private set; }
 
 
         public Map(int rows, int cols, int density)
@@ -44,7 +45,13 @@ namespace LifeS
                         field[x, y].humans.Add(rand);
                         TotalOfHerbivores++;
                     }
-                    if (random.Next(density) == 0)
+                    if (random.Next(density*4) == 0)
+                    {
+                        Omnivore rand = new Omnivore(x, y, random);
+                        field[x, y].omnivores.Add(rand);
+                        TotalOfOmnivores++;
+                    }
+                    if (random.Next(density*5) == 0)
                     {
                         Predator rand = new Predator(x, y, random);
                         field[x, y].predators.Add(rand);
@@ -64,6 +71,7 @@ namespace LifeS
             CurrentGeneration++;
             TotalOfHerbivores = 0;
             TotalOfPredators = 0;
+            TotalOfOmnivores = 0;
             for (int x = 0; x < cols; x++)
             {
                 for (int y = 0; y < rows; y++)
@@ -100,12 +108,44 @@ namespace LifeS
                         field[x, y].predators.AddRange(field[x, y].pchilds);
                         field[x, y].pchilds.Clear();
                     }
+
+
+                    if (field[x, y].omnivores.Count > 0)
+                    {
+                        UpdateOmnivoresInfo(x, y);
+                        List<Omnivore> rem2 = new List<Omnivore>();
+                        List<Omnivore> add2 = new List<Omnivore>();
+                        foreach (Omnivore o in field[x, y].omnivores)//движение
+                        {
+                            if (!o.changed)
+                            {
+                                TotalOfOmnivores++;
+                                o.DoSomething(field.GetLength(0), field.GetLength(1), field);
+                                add2.Add(o);
+
+                            }
+                            else
+                            {
+                                rem2.Add(o);
+
+                            }
+                        }
+                        field[x, y].omnivores = rem2;
+
+                        foreach (Omnivore o in add2)
+                        {
+                            field[o.x, o.y].omnivores.Add(o);
+                        }
+
+                        field[x, y].omnivores.AddRange(field[x, y].ochilds);
+                        field[x, y].ochilds.Clear();
+                    }
+
+
                     if (field[x, y].humans.Count() > 0)
                     {
 
                         UpdateHerbivoresInfo(x, y);
-                        
-
                         List<Herbivore> rem = new List<Herbivore>();
                         List<Herbivore> add = new List<Herbivore>();
                         foreach (Herbivore h in field[x, y].humans)//движение
@@ -174,6 +214,13 @@ namespace LifeS
                             b.changed = false;
                         }
                     }
+                    if (field[x, y].omnivores.Count() > 0)
+                    {
+                        foreach (Omnivore b in field[x, y].omnivores)
+                        {
+                            b.changed = false;
+                        }
+                    }
 
                 }
             }
@@ -208,6 +255,7 @@ namespace LifeS
                 }
             }
         }
+
         private void UpdatePlantsInfo(int x, int y)
         {
             if (field[x, y].plant!=null && !field[x, y].plant.alive)
@@ -215,6 +263,7 @@ namespace LifeS
                     field[x, y].plant=null;
             }
         }
+
         private void UpdateHerbivoresInfo(int x, int y)
         {
             List<Herbivore> checkAliveHumans = new List<Herbivore>();
@@ -231,6 +280,7 @@ namespace LifeS
 
             field[x, y].humans = checkAliveHumans;
         }
+
         private void UpdatePredatorsInfo(int x, int y)
         {
             List<Predator> checkAliveHumans = new List<Predator>();
@@ -246,6 +296,22 @@ namespace LifeS
             }
 
             field[x, y].predators = checkAliveHumans;
+        }
+        private void UpdateOmnivoresInfo(int x, int y)
+        {
+            List<Omnivore> checkAliveOmnivores = new List<Omnivore>();
+            foreach (Omnivore o in field[x, y].omnivores)
+            {
+                if (o.satiety == 0)
+                    o.Dead();
+                if (o.alive)
+                {
+                    checkAliveOmnivores.Add(o);
+                }
+
+            }
+
+            field[x, y].omnivores = checkAliveOmnivores;
         }
 
         private void StartEvent()
@@ -267,6 +333,7 @@ namespace LifeS
             }
             mapEvents = _mapEvents;
         }
+
         public void CreateEvent(int x, int y)
         {
             Event ev = new Event(random,field);

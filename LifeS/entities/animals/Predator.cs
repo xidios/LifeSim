@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace LifeS
-{
+{   
     public class Predator : Animal
     {
         private Random random;
-        public int viewDistance = 20;
+        public int viewDistance = 70;
         public Predator(int _x, int _y, Random rand) : base(_x, _y, rand)
         {
             random = rand;
@@ -38,11 +38,11 @@ namespace LifeS
         }
 
 
-        public void EatHerbivore(int _x, int _y, Cell[,] field)
+        private void EatHerbivore(int _x, int _y, Cell[,] field)
         {
             if (field[_x, _y].humans.Count>0 && field[_x, _y].humans[0].alive)
             {
-                satiety += 50;
+                satiety += 70;
                 field[_x, _y].humans[0].Dead();
             }
         }

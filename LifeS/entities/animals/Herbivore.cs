@@ -10,7 +10,7 @@ namespace LifeS
     public class Herbivore : Animal
     {
         private Random random;
-        public int viewDistance = 30;
+        public int viewDistance = 40;
         public Herbivore(int _x, int _y, Random rand) : base (_x,_y,rand)
         {
             random = rand;
@@ -45,9 +45,7 @@ namespace LifeS
                 {
                     satiety += 50;
                     field[_x, _y].plant.Dead();
-                }
-            
-            
+                }           
         }
 
 

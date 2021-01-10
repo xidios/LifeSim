@@ -15,6 +15,9 @@ namespace LifeS
         public List<Herbivore> childs = new List<Herbivore>();
         public List<Predator> predators = new List<Predator>();
         public List<Predator> pchilds = new List<Predator>();
+        public List<Omnivore> omnivores = new List<Omnivore>();
+        public List<Omnivore> ochilds = new List<Omnivore>();
+        public List<Animal> animals = new List<Animal>();
 
 
 

@@ -31,6 +31,7 @@ namespace LifeS
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.totalOfPredators = new System.Windows.Forms.Label();
             this.sex = new System.Windows.Forms.Label();
             this.labelTimeChild = new System.Windows.Forms.Label();
             this.status = new System.Windows.Forms.Label();
@@ -46,7 +47,7 @@ namespace LifeS
             this.listView1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.totalOfPredators = new System.Windows.Forms.Label();
+            this.totalOfOmnivores = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -66,6 +67,7 @@ namespace LifeS
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.totalOfOmnivores);
             this.splitContainer1.Panel1.Controls.Add(this.totalOfPredators);
             this.splitContainer1.Panel1.Controls.Add(this.sex);
             this.splitContainer1.Panel1.Controls.Add(this.labelTimeChild);
@@ -88,10 +90,19 @@ namespace LifeS
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
             // 
+            // totalOfPredators
+            // 
+            this.totalOfPredators.AutoSize = true;
+            this.totalOfPredators.Location = new System.Drawing.Point(49, 343);
+            this.totalOfPredators.Name = "totalOfPredators";
+            this.totalOfPredators.Size = new System.Drawing.Size(87, 13);
+            this.totalOfPredators.TabIndex = 18;
+            this.totalOfPredators.Text = "TotalOfPredators";
+            // 
             // sex
             // 
             this.sex.AutoSize = true;
-            this.sex.Location = new System.Drawing.Point(49, 367);
+            this.sex.Location = new System.Drawing.Point(49, 382);
             this.sex.Name = "sex";
             this.sex.Size = new System.Drawing.Size(25, 13);
             this.sex.TabIndex = 17;
@@ -100,7 +111,7 @@ namespace LifeS
             // labelTimeChild
             // 
             this.labelTimeChild.AutoSize = true;
-            this.labelTimeChild.Location = new System.Drawing.Point(49, 380);
+            this.labelTimeChild.Location = new System.Drawing.Point(49, 395);
             this.labelTimeChild.Name = "labelTimeChild";
             this.labelTimeChild.Size = new System.Drawing.Size(97, 13);
             this.labelTimeChild.TabIndex = 16;
@@ -109,7 +120,7 @@ namespace LifeS
             // status
             // 
             this.status.AutoSize = true;
-            this.status.Location = new System.Drawing.Point(49, 403);
+            this.status.Location = new System.Drawing.Point(49, 415);
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(37, 13);
             this.status.TabIndex = 14;
@@ -118,7 +129,7 @@ namespace LifeS
             // humanSatiety
             // 
             this.humanSatiety.AutoSize = true;
-            this.humanSatiety.Location = new System.Drawing.Point(49, 354);
+            this.humanSatiety.Location = new System.Drawing.Point(49, 369);
             this.humanSatiety.Name = "humanSatiety";
             this.humanSatiety.Size = new System.Drawing.Size(86, 13);
             this.humanSatiety.TabIndex = 13;
@@ -240,14 +251,14 @@ namespace LifeS
             this.timer1.Interval = 150;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // totalOfPredators
+            // totalOfOmnivores
             // 
-            this.totalOfPredators.AutoSize = true;
-            this.totalOfPredators.Location = new System.Drawing.Point(49, 343);
-            this.totalOfPredators.Name = "totalOfPredators";
-            this.totalOfPredators.Size = new System.Drawing.Size(87, 13);
-            this.totalOfPredators.TabIndex = 18;
-            this.totalOfPredators.Text = "TotalOfPredators";
+            this.totalOfOmnivores.AutoSize = true;
+            this.totalOfOmnivores.Location = new System.Drawing.Point(49, 356);
+            this.totalOfOmnivores.Name = "totalOfOmnivores";
+            this.totalOfOmnivores.Size = new System.Drawing.Size(92, 13);
+            this.totalOfOmnivores.TabIndex = 19;
+            this.totalOfOmnivores.Text = "TotalOfOmnivores";
             // 
             // Form1
             // 
@@ -289,6 +300,7 @@ namespace LifeS
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label sex;
         private System.Windows.Forms.Label totalOfPredators;
+        private System.Windows.Forms.Label totalOfOmnivores;
     }
 }
 
