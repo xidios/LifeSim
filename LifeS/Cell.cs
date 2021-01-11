@@ -10,13 +10,7 @@ namespace LifeS
     {
         public int x;
         public int y;
-        //public List<Herbivore> humans = new List<Herbivore>();
-        public Plant plant = null;
-        //public List<Herbivore> childs = new List<Herbivore>();
-        //public List<Predator> predators = new List<Predator>();
-        //public List<Predator> pchilds = new List<Predator>();
-        //public List<Omnivore> omnivores = new List<Omnivore>();
-        //public List<Omnivore> ochilds = new List<Omnivore>();
+        public Plant plant = null;        
         public List<Animal> animals = new List<Animal>();
         public List<Animal> achilds = new List<Animal>();
 

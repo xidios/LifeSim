@@ -31,6 +31,7 @@ namespace LifeS
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.totalOfOmnivores = new System.Windows.Forms.Label();
             this.totalOfPredators = new System.Windows.Forms.Label();
             this.sex = new System.Windows.Forms.Label();
             this.labelTimeChild = new System.Windows.Forms.Label();
@@ -47,7 +48,6 @@ namespace LifeS
             this.listView1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.totalOfOmnivores = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -89,6 +89,15 @@ namespace LifeS
             this.splitContainer1.Size = new System.Drawing.Size(1198, 582);
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // totalOfOmnivores
+            // 
+            this.totalOfOmnivores.AutoSize = true;
+            this.totalOfOmnivores.Location = new System.Drawing.Point(49, 356);
+            this.totalOfOmnivores.Name = "totalOfOmnivores";
+            this.totalOfOmnivores.Size = new System.Drawing.Size(92, 13);
+            this.totalOfOmnivores.TabIndex = 19;
+            this.totalOfOmnivores.Text = "TotalOfOmnivores";
             // 
             // totalOfPredators
             // 
@@ -186,7 +195,7 @@ namespace LifeS
             // 
             this.Density.Location = new System.Drawing.Point(49, 103);
             this.Density.Minimum = new decimal(new int[] {
-            10,
+            3,
             0,
             0,
             0});
@@ -194,7 +203,7 @@ namespace LifeS
             this.Density.Size = new System.Drawing.Size(120, 20);
             this.Density.TabIndex = 4;
             this.Density.Value = new decimal(new int[] {
-            10,
+            3,
             0,
             0,
             0});
@@ -250,15 +259,6 @@ namespace LifeS
             // 
             this.timer1.Interval = 150;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // totalOfOmnivores
-            // 
-            this.totalOfOmnivores.AutoSize = true;
-            this.totalOfOmnivores.Location = new System.Drawing.Point(49, 356);
-            this.totalOfOmnivores.Name = "totalOfOmnivores";
-            this.totalOfOmnivores.Size = new System.Drawing.Size(92, 13);
-            this.totalOfOmnivores.TabIndex = 19;
-            this.totalOfOmnivores.Text = "TotalOfOmnivores";
             // 
             // Form1
             // 
