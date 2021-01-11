@@ -31,13 +31,11 @@ namespace LifeS
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.totalOfOmnivores = new System.Windows.Forms.Label();
-            this.totalOfPredators = new System.Windows.Forms.Label();
+            this.totalOfAnimals = new System.Windows.Forms.Label();
             this.sex = new System.Windows.Forms.Label();
             this.labelTimeChild = new System.Windows.Forms.Label();
             this.status = new System.Windows.Forms.Label();
             this.humanSatiety = new System.Windows.Forms.Label();
-            this.TotalHuman = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -67,13 +65,11 @@ namespace LifeS
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.totalOfOmnivores);
-            this.splitContainer1.Panel1.Controls.Add(this.totalOfPredators);
+            this.splitContainer1.Panel1.Controls.Add(this.totalOfAnimals);
             this.splitContainer1.Panel1.Controls.Add(this.sex);
             this.splitContainer1.Panel1.Controls.Add(this.labelTimeChild);
             this.splitContainer1.Panel1.Controls.Add(this.status);
             this.splitContainer1.Panel1.Controls.Add(this.humanSatiety);
-            this.splitContainer1.Panel1.Controls.Add(this.TotalHuman);
             this.splitContainer1.Panel1.Controls.Add(this.label3);
             this.splitContainer1.Panel1.Controls.Add(this.buttonPause);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
@@ -91,23 +87,14 @@ namespace LifeS
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
             // 
-            // totalOfOmnivores
+            // totalOfAnimals
             // 
-            this.totalOfOmnivores.AutoSize = true;
-            this.totalOfOmnivores.Location = new System.Drawing.Point(49, 356);
-            this.totalOfOmnivores.Name = "totalOfOmnivores";
-            this.totalOfOmnivores.Size = new System.Drawing.Size(92, 13);
-            this.totalOfOmnivores.TabIndex = 19;
-            this.totalOfOmnivores.Text = "TotalOfOmnivores";
-            // 
-            // totalOfPredators
-            // 
-            this.totalOfPredators.AutoSize = true;
-            this.totalOfPredators.Location = new System.Drawing.Point(49, 343);
-            this.totalOfPredators.Name = "totalOfPredators";
-            this.totalOfPredators.Size = new System.Drawing.Size(87, 13);
-            this.totalOfPredators.TabIndex = 18;
-            this.totalOfPredators.Text = "TotalOfPredators";
+            this.totalOfAnimals.AutoSize = true;
+            this.totalOfAnimals.Location = new System.Drawing.Point(49, 326);
+            this.totalOfAnimals.Name = "totalOfAnimals";
+            this.totalOfAnimals.Size = new System.Drawing.Size(78, 13);
+            this.totalOfAnimals.TabIndex = 19;
+            this.totalOfAnimals.Text = "TotalOfAnimals";
             // 
             // sex
             // 
@@ -144,15 +131,6 @@ namespace LifeS
             this.humanSatiety.Size = new System.Drawing.Size(86, 13);
             this.humanSatiety.TabIndex = 13;
             this.humanSatiety.Text = "Satiety of human";
-            // 
-            // TotalHuman
-            // 
-            this.TotalHuman.AutoSize = true;
-            this.TotalHuman.Location = new System.Drawing.Point(49, 330);
-            this.TotalHuman.Name = "TotalHuman";
-            this.TotalHuman.Size = new System.Drawing.Size(81, 13);
-            this.TotalHuman.TabIndex = 9;
-            this.TotalHuman.Text = "TotalOfHumans";
             // 
             // label3
             // 
@@ -293,7 +271,6 @@ namespace LifeS
         private System.Windows.Forms.NumericUpDown Density;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label TotalHuman;
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ListView listView1;
@@ -302,8 +279,7 @@ namespace LifeS
         private System.Windows.Forms.Label labelTimeChild;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label sex;
-        private System.Windows.Forms.Label totalOfPredators;
-        private System.Windows.Forms.Label totalOfOmnivores;
+        private System.Windows.Forms.Label totalOfAnimals;
     }
 }
 

@@ -49,7 +49,6 @@ namespace LifeS
                     {
                         Omnivore rand = new Omnivore(x, y, random);
                         field[x, y].animals.Add(rand);
-                        //TotalOfOmnivores++;
                     }
                     if (random.Next(density*5) == 0)
                     {
@@ -76,45 +75,37 @@ namespace LifeS
                 {
                     CreateRandomPlant(x, y, random);
                     UpdatePlantsInfo(x, y);
+
                     if (field[x, y].animals.Count > 0)
                     {
-                        if (field[x, y].animals.Count > 0)
-                        {
-                            UpdateAnimalsInfo(x, y);
-                            List<Animal> rem2 = new List<Animal>();
-                            List<Animal> add2 = new List<Animal>();
-                            foreach (Animal o in field[x, y].animals)//движение
-                            {
-                                if (!o.changed)
-                                {
-                                    TotalOfAnimals++;
-                                    o.DoSomething(field.GetLength(0), field.GetLength(1), field);
-                                    add2.Add(o);
-
-                                }
-                                else
-                                {
-                                    rem2.Add(o);
-
-                                }
-                            }
-                            field[x, y].animals = rem2;
-
-                            foreach (Animal o in add2)
-                            {
-                                field[o.x, o.y].animals.Add(o);
-                            }
-
-                            field[x, y].animals.AddRange(field[x, y].achilds);
-                            field[x, y].achilds.Clear();
-                        }
-                       
+                        UpdateCellInformation(x, y);
                     }
+
+
                 }
 
             }
+            
             CheckedToFalse();
             return field;
+        }
+        private void UpdateCellInformation(int x,int y)
+        {
+            UpdateAnimalsInfo(x, y);
+            List<Animal> rem = field[x, y].animals.OfType<Animal>().Where(animal => animal.changed).ToList();
+            List<Animal> add = field[x, y].animals.OfType<Animal>().Where(animal => !animal.changed).ToList();
+
+            field[x, y].animals = rem;
+
+            foreach (Animal o in add)
+            {
+                TotalOfAnimals++;
+                o.DoSomething(field.GetLength(0), field.GetLength(1), field);
+                field[o.x, o.y].animals.Add(o);
+            }
+
+            field[x, y].animals.AddRange(field[x, y].achilds);
+            field[x, y].achilds.Clear();
         }
         public Animal GetHuman(int _x, int _y)
         {

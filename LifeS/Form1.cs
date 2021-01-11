@@ -16,7 +16,6 @@ namespace LifeS
         private Graphics graphics;
         private int resolution;
         private Map gameEngine;
-        int sizeOfCell;
         int rows=100;
         int cols=100;
         private Animal observedHuman = null;
@@ -43,7 +42,7 @@ namespace LifeS
             gameEngine = new Map(
                 rows: rows,
                 cols: cols,
-                density: (int)Density.Minimum + (int)Density.Maximum - (int)Density.Value
+                density: 150
                 ) ;
 
 
@@ -132,9 +131,7 @@ namespace LifeS
             }
 
             Text = $"Generation {gameEngine.CurrentGeneration}";
-            TotalHuman.Text = $"Total of herbivore: {gameEngine.TotalOfHerbivores}";
-            totalOfPredators.Text = $"Total of predators: {gameEngine.TotalOfPredators}";
-            totalOfOmnivores.Text = $"Total of omnivores: {gameEngine.TotalOfAnimals}";
+            totalOfAnimals.Text = $"Total of animals: {gameEngine.TotalOfAnimals}";
 
 
             pictureBox1.Refresh();
