@@ -17,8 +17,8 @@ namespace LifeS
         private int resolution;
         private Map gameEngine;
         int sizeOfCell;
-        int rows=3000;
-        int cols=3000;
+        int rows=100;
+        int cols=100;
         private Animal observedHuman = null;
 
         public Form1()
@@ -38,25 +38,30 @@ namespace LifeS
             sex.Text = null;
             observedHuman = null;
 
-            sizeOfCell = (int)Resolution.Value;
             resolution = (int)Resolution.Value;//присваиваем значение в инт
 
             gameEngine = new Map(
-                rows: pictureBox1.Height / resolution,
-                cols: pictureBox1.Width / resolution,
+                rows: rows,
+                cols: cols,
                 density: (int)Density.Minimum + (int)Density.Maximum - (int)Density.Value
                 ) ;
 
 
             Text = $"Generation {gameEngine.CurrentGeneration}";
 
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
+            pictureBox1.Image = new Bitmap(cols*resolution, rows*resolution);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
             graphics = Graphics.FromImage(pictureBox1.Image);//передали картинку из прошлой строчки
             timer1.Start();
         }
         private void DrawGeneration()
         {
-            graphics.Clear(Color.Black);//очищаем игровое поле
+            if (resolution != (int)Resolution.Value)
+            {
+                resolution = (int)Resolution.Value;
+                pictureBox1.Image = new Bitmap(cols * resolution, rows * resolution);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
+                graphics = Graphics.FromImage(pictureBox1.Image);
+            }
+                graphics.Clear(Color.Black);//очищаем игровое поле
             var field = gameEngine.NextGeneration();
 
             for (int x = 0; x < field.GetLength(0); x++)
