@@ -46,6 +46,7 @@ namespace LifeS
             this.listView1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.animalType = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -65,6 +66,7 @@ namespace LifeS
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.animalType);
             this.splitContainer1.Panel1.Controls.Add(this.totalOfAnimals);
             this.splitContainer1.Panel1.Controls.Add(this.sex);
             this.splitContainer1.Panel1.Controls.Add(this.labelTimeChild);
@@ -240,6 +242,15 @@ namespace LifeS
             this.timer1.Interval = 150;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // animalType
+            // 
+            this.animalType.AutoSize = true;
+            this.animalType.Location = new System.Drawing.Point(49, 356);
+            this.animalType.Name = "animalType";
+            this.animalType.Size = new System.Drawing.Size(76, 13);
+            this.animalType.TabIndex = 20;
+            this.animalType.Text = "Type of animal";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -280,6 +291,7 @@ namespace LifeS
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label sex;
         private System.Windows.Forms.Label totalOfAnimals;
+        private System.Windows.Forms.Label animalType;
     }
 }
 

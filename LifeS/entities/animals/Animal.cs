@@ -10,7 +10,7 @@ namespace LifeS
     {
         public int satiety = 100;
         public bool changed = false;
-        public int timeLastChild = 100;        
+        public int timeLastChild;        
         public Gender gender;
         private Random random;
         public Animal(int _x,int _y,Random rand):  base(_x,_y)
@@ -19,6 +19,7 @@ namespace LifeS
             y = _y;
             alive = true;
             random = rand;
+            timeLastChild = random.Next(70) + 50;
 
 
             if (random.Next(2) == 0)

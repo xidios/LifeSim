@@ -16,9 +16,13 @@ namespace LifeS
         private Graphics graphics;
         private int resolution;
         private Map gameEngine;
-        int rows=100;
-        int cols=100;
+        int rows=1000;
+        int cols=1000;
+        int density = 600;
         private Animal observedHuman = null;
+        System.Media.SoundPlayer sp = new System.Media.SoundPlayer();
+
+
 
         public Form1()
         {
@@ -30,6 +34,9 @@ namespace LifeS
             
             buttonStart.Text = "RESTART";
             buttonPause.Text = "Pause";
+            sp.SoundLocation = "plants_vs_zombies.wav";
+            
+            sp.Play();
 
             labelTimeChild.Text = null;
             humanSatiety.Text = null;
@@ -42,23 +49,45 @@ namespace LifeS
             gameEngine = new Map(
                 rows: rows,
                 cols: cols,
-                density: 150
+                density: density
                 ) ;
 
 
             Text = $"Generation {gameEngine.CurrentGeneration}";
 
-            pictureBox1.Image = new Bitmap(cols*resolution, rows*resolution);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
-            graphics = Graphics.FromImage(pictureBox1.Image);//передали картинку из прошлой строчки
+            BitmapChange();
             timer1.Start();
+        }
+
+        private void BitmapChange()
+        {           
+            pictureBox1.Image = new Bitmap(cols * resolution, rows * resolution);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
+            graphics = Graphics.FromImage(pictureBox1.Image);//передали картинку из прошлой строчки
+        }
+        private void ColorChange(Animal a,int x,int y)
+        {
+            (Brush, Brush) colors = ColorsForType(a);
+            if (a.gender == Gender.female)
+                graphics.FillRectangle(colors.Item1, x * resolution, y * resolution, resolution, resolution);
+            else
+                graphics.FillRectangle(colors.Item2, x * resolution, y * resolution, resolution, resolution);
+        }
+        private (Brush, Brush) ColorsForType(Animal a)
+        {
+            if (a is Herbivore)
+                return (Brushes.Coral, Brushes.Moccasin);
+            else if (a is Omnivore)
+                return (Brushes.Azure, Brushes.LightGray);
+            else if (a is Predator)
+                return (Brushes.DeepPink, Brushes.Plum);
+            return (null,null);
         }
         private void DrawGeneration()
         {
             if (resolution != (int)Resolution.Value)
             {
                 resolution = (int)Resolution.Value;
-                pictureBox1.Image = new Bitmap(cols * resolution, rows * resolution);//создаем битмап. Новую картинку // pictureBox1.Width, pictureBox1.Height
-                graphics = Graphics.FromImage(pictureBox1.Image);
+                BitmapChange();
             }
                 graphics.Clear(Color.Black);//очищаем игровое поле
             var field = gameEngine.NextGeneration();
@@ -75,27 +104,8 @@ namespace LifeS
                     }
 
                     if (field[x, y].animals.Count() > 0)
-                    {
-                        if (field[x, y].animals[0] is Herbivore)
-                        {
-                            if (field[x, y].animals[0].gender == Gender.female)
-                                graphics.FillRectangle(Brushes.Coral, x * resolution, y * resolution, resolution, resolution);
-                            else graphics.FillRectangle(Brushes.Moccasin, x * resolution, y * resolution, resolution, resolution);
-                        }
-                        else if (field[x, y].animals[0] is Predator)
-                        {
-                            if (field[x, y].animals[0].gender == Gender.female)
-                                graphics.FillRectangle(Brushes.DeepPink, x * resolution, y * resolution, resolution, resolution);
-                            else
-                                graphics.FillRectangle(Brushes.Plum, x * resolution, y * resolution, resolution, resolution);
-                        }
-                        else if (field[x, y].animals[0] is Omnivore)
-                        {
-                            if (field[x, y].animals[0].gender == Gender.female)
-                                graphics.FillRectangle(Brushes.Azure, x * resolution, y * resolution, resolution, resolution);
-                            else
-                                graphics.FillRectangle(Brushes.LightGray, x * resolution, y * resolution, resolution, resolution);
-                        }
+                    {                      
+                            ColorChange(field[x, y].animals[0], x, y);                       
                     }
                     if (observedHuman != null)
                     {
@@ -155,11 +165,13 @@ namespace LifeS
             if (timer1.Enabled)
             {                
                 timer1.Stop();
+                sp.Stop();
                 buttonPause.Text = "Continue";
             }
             else if(!timer1.Enabled)
             {               
                 timer1.Start();
+                sp.Play();
                 buttonPause.Text = "Pause";
             }           
         }
@@ -176,11 +188,12 @@ namespace LifeS
                     status.Text = $"Status: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";// $"{x} {y}"                 
                     labelTimeChild.Text = $"Time from last child: {observedHuman.timeLastChild}";
                     sex.Text = $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
-
+                    animalType.Text = $"Type: {observedHuman.GetType().Name}";
                     graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
                 }
                 else
                 {
+                    animalType.Text = null;
                     labelTimeChild.Text = null;
                     humanSatiety.Text = null;
                     status.Text = null;
