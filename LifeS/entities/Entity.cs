@@ -11,6 +11,7 @@ namespace LifeS
         public int x;
         public int y;
         public bool alive;
+
         public Entity(int _x, int _y) {
             x = _x;
             y = _y;
@@ -19,7 +20,6 @@ namespace LifeS
 
         public void Dead()
         {
-
             alive = false;
         }
     }

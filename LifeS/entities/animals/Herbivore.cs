@@ -10,7 +10,7 @@ namespace LifeS
     public class Herbivore : Animal
     {
         private Random random;
-        public int viewDistance = 40;
+        private new int viewDistance = 10;
         public Herbivore(int _x, int _y, Random rand) : base (_x,_y,rand)
         {
             random = rand;
@@ -37,178 +37,18 @@ namespace LifeS
             if (timeLastChild > 0)
                 timeLastChild--;
         }
-
-        private void EatPlant(int _x, int _y,Cell[,] field)
-        {
-            
-                if (field[_x, _y].plant!=null && field[_x, _y].plant.alive)
-                {
-                    satiety += 50;
-                    field[_x, _y].plant.Dead();
-                }           
-        }
-
-
-
-        private void SearchFood(Cell[,] field)
-        {
-            Direction direction = Direction.none;
-            int distance = viewDistance;
-
-            for (int v = 0; v < viewDistance; v++)
-            {
-                if (x - v >= 0)
-                {
-                    if (field[x - v, y].plant != null)
-                    {
-                        direction = Direction.left;
-                        distance = v;
-                        break;
-                    }
-                }
-                if (y - v >= 0)
-                {
-                    if (field[x, y - v].plant != null)
-                    {
-                        direction = Direction.up;
-                        distance = v;
-                        break;
-                    }
-                }
-                if (x + v < field.GetLength(0))
-                {
-                    if (field[x + v, y].plant != null)
-                    {
-                        direction = Direction.right;
-                        distance = v;
-                        break;
-                    }
-                }
-                if (y + v < field.GetLength(1))
-                {
-                    if (field[x, y + v].plant != null)
-                    {
-                        direction = Direction.down;
-                        distance = v;
-                        break;
-                    }
-                }
-            }
-
-
-
-
-
-            if (distance == 0)
-            {
-                EatPlant(x, y, field);
-
-            }
-            else
-            {
-                if (direction == Direction.none)
-                    PanicMove(field.GetLength(0), field.GetLength(1));
-                else
-                    Move(field.GetLength(0), field.GetLength(1), direction);
-
-            }
-
-
-
-        }
+       
 
         private void SearchPartner(Cell[,] field)
         {
+            
+            Entity therbivore = FindTarget(ref field);
             Direction direction = Direction.none;
-            int distance=viewDistance;
 
-            Herbivore therbivore = null;
-            for (int v = 0; v < viewDistance; v++)
-            {
-                if (x - v >= 0)
-                {
-                    if (field[x - v, y].animals != null)
-                    {
-                        foreach (Animal hum in field[x - v, y].animals)
-                        {
-                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                therbivore = (Herbivore)hum;
-                                direction = Direction.left;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-                        
-                    }
-                }
-                if (y - v >= 0)
-                {
-                    if (field[x, y - v].animals != null)
-                    {
-                        foreach (Animal hum in field[x, y - v].animals)
-                        {
-                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                therbivore = (Herbivore)hum;
-                                direction = Direction.up;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-
-                        
-                    }
-                }
-                if (x + v < field.GetLength(0))
-                {
-                    if (field[x + v, y].animals != null)
-                    {
-                        foreach (Animal hum in field[x + v, y].animals)
-                        {
-                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                therbivore = (Herbivore)hum;
-                                direction = Direction.right;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-
-                        
-                    }
-                }
-                if (y + v < field.GetLength(1))
-                {
-                    if (field[x, y + v].animals != null)
-                    {
-                        foreach (Animal hum in field[x, y + v].animals)
-                        {
-                            if (hum is Herbivore && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                therbivore = (Herbivore)hum;
-                                direction = Direction.down;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }                        
-                    }
-                }
-            }
-
-
-            if (distance==0&& therbivore != null)
-            {
+            if (therbivore != null)
+                direction = MoveToTarget(therbivore, x, y);
+            if (direction == Direction.samePosition)
                 DoChild(x, y, field, therbivore);
-            }
             else
             {
                 if (direction == Direction.none)
@@ -219,15 +59,52 @@ namespace LifeS
             }
         }
 
-        private void DoChild(int _x, int _y, Cell[,] field, Herbivore h)
+
+        private void DoChild(int _x, int _y, Cell[,] field, Entity h)
         {
             Herbivore c = new Herbivore(_x,_y,random);
-            c.changed = false;
-            field[_x, _y].achilds.Add(c);
-            h.timeLastChild = 150;
+            Herbivore ah = (Herbivore)h;
+            c.changed = true;
+            field[_x, _y].animals.Add(c);
+            ah.timeLastChild = 150;
             timeLastChild = 200;
         }
+        public override Entity CheckEat(int _x, int _y, ref Cell[,] field)
+        {
+            int tempX = x + _x;
+            int tempY = y + _y;
 
+            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+            {
+                if (field[tempX, tempY].plant != null)
+                {
+                    return field[tempX, tempY].plant;
+                }                
+            }
+
+            return null;
+        }
+        public override Entity CheckTarget(int _x, int _y, ref Cell[,] field)
+        {
+            int tempX = x + _x;
+            int tempY = y + _y;
+
+            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+            {
+                if (field[tempX, tempY].animals.Count > 0)
+                {
+                    foreach (Animal o in field[tempX, tempY].animals)
+                    {
+                        if (o is Herbivore && gender != o.gender && o.satiety >= 40 && o.timeLastChild == 0)
+                        {
+                            return o;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
 
     }
 }

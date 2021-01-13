@@ -9,7 +9,7 @@ namespace LifeS
     public class Predator : Animal
     {
         private Random random;
-        public int viewDistance = 70;
+        public new int viewDistance = 70;
         public Predator(int _x, int _y, Random rand) : base(_x, _y, rand)
         {
             random = rand;
@@ -36,206 +36,16 @@ namespace LifeS
             if (timeLastChild > 0)
                 timeLastChild--;
         }
-
-
-        private void EatHerbivore(int _x, int _y, Herbivore h)
-        {
-                satiety += 70;
-                h.Dead();           
-        }
-
-
-
-        private void SearchFood(Cell[,] field)
-        {
-            Direction direction = Direction.none;
-            int distance = viewDistance;
-            Herbivore at = null;
-
-            for (int v = 0; v < viewDistance; v++)
-            {
-                if (x - v >= 0)
-                {
-                    if (field[x - v, y].animals.Count > 0)
-                    {
-                        foreach (Animal a in field[x-v, y].animals)
-                        {
-                            if(a is Herbivore)
-                            {
-                                at = (Herbivore)a;
-                                direction = Direction.left;
-                                distance = v;
-                                break;
-                            }
-                        }
-                        if(at!=null)
-                        break;
-                    }
-                }
-                if (y - v >= 0)
-                {
-                    if (field[x, y-v].animals.Count > 0)
-                    {
-                        foreach (Animal a in field[x, y-v].animals)
-                        {
-                            if (a is Herbivore)
-                            {
-                                at = (Herbivore)a;
-                                direction = Direction.up;
-                                distance = v;
-                                break;
-                            }
-                        }
-                        if (at != null)
-                            break;
-                    }
-                }
-                if (x + v < field.GetLength(0))
-                {
-                    if (field[x+v, y].animals.Count > 0)
-                    {
-                        foreach (Animal a in field[x+v, y].animals)
-                        {
-                            if (a is Herbivore)
-                            {
-                                at = (Herbivore)a;
-                                direction = Direction.right;
-                                distance = v;
-                                break;
-                            }
-                        }
-                        if (at != null)
-                            break;
-                    }
-                }
-                if (y + v < field.GetLength(1))
-                {
-                    if (field[x, y+v].animals.Count > 0)
-                    {
-                        foreach (Animal a in field[x, y+v].animals)
-                        {
-                            if (a is Herbivore)
-                            {
-                                at = (Herbivore)a;
-                                direction = Direction.down;
-                                distance = v;
-                                break;
-                            }
-                        }
-                        if (at != null)
-                            break;
-                    }
-                }
-            }
-
-
-            if (at != null && distance == 0)
-            {
-                EatHerbivore(x, y, at);
-            }
-            else {
-               if (direction == Direction.none)
-                    PanicMove(field.GetLength(0), field.GetLength(1));
-                else
-                    Move(field.GetLength(0), field.GetLength(1), direction);
-            }
-
-
-
-        }
-
         private void SearchPartner(Cell[,] field)
         {
+
+            Entity tpreadtor = FindTarget(ref field);
             Direction direction = Direction.none;
-            int distance = viewDistance;
 
-            Predator tpredator = null;
-            for (int v = 0; v < viewDistance; v++)
-            {
-                if (x - v >= 0)
-                {
-                    if (field[x - v, y].animals != null)
-                    {
-                        foreach (Animal p in field[x - v, y].animals)
-                        {
-                            if (p is Predator&& p.gender != gender && p.satiety >= 50 && p.timeLastChild == 0)
-                            {
-                                tpredator = (Predator)p;
-                                direction = Direction.left;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-
-                    }
-                }
-                if (y - v >= 0)
-                {
-                    if (field[x, y - v].animals != null)
-                    {
-                        foreach (Animal hum in field[x, y - v].animals)
-                        {
-                            if (hum is Predator && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                tpredator = (Predator)hum;
-                                direction = Direction.up;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-
-
-                    }
-                }
-                if (x + v < field.GetLength(0))
-                {
-                    if (field[x + v, y].animals != null)
-                    {
-                        foreach (Animal hum in field[x + v, y].animals)
-                        {
-                            if (hum is Predator && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                tpredator = (Predator)hum;
-                                direction = Direction.right;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-
-
-                    }
-                }
-                if (y + v < field.GetLength(1))
-                {
-                    if (field[x, y + v].animals != null)
-                    {
-                        foreach (Animal hum in field[x, y + v].animals)
-                        {
-                            if (hum is Predator && hum.gender != gender && hum.satiety >= 50 && hum.timeLastChild == 0)
-                            {
-                                tpredator = (Predator)hum;
-                                direction = Direction.down;
-                                distance = v;
-                                v = viewDistance;
-                                break;
-                            }
-
-                        }
-                    }
-                }
-            }
-
-
-            if (distance == 0 && tpredator != null)
-            {
-                DoChild(x, y, field, tpredator);
-            }
+            if (tpreadtor != null)
+                direction = MoveToTarget(tpreadtor, x, y);
+            if (direction == Direction.samePosition)
+                DoChild(x, y, field, tpreadtor);
             else
             {
                 if (direction == Direction.none)
@@ -247,13 +57,52 @@ namespace LifeS
         }
 
 
-        private void DoChild(int _x, int _y, Cell[,] field, Predator h)
+        public override Entity CheckEat(int _x, int _y, ref Cell[,] field)
+        {
+            int tempX = x + _x;
+            int tempY = y + _y;
+
+            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+            {
+                if (field[tempX, tempY].animals.Count > 0)
+                {
+                    foreach (Animal a in field[tempX, tempY].animals)
+                        if (a is Herbivore)
+                            return a;
+                }
+            }
+
+            return null;
+        }
+        private void DoChild(int _x, int _y, Cell[,] field, Entity h)
         {
             Predator c = new Predator(_x, _y, random);
-            c.changed = false;
-            field[_x, _y].achilds.Add(c);
-            h.timeLastChild = 150;
+            Predator ah = (Predator)h;
+            c.changed = true;
+            field[_x, _y].animals.Add(c);
+            ah.timeLastChild = 150;
             timeLastChild = 200;
+        }
+        public override Entity CheckTarget(int _x, int _y, ref Cell[,] field)
+        {
+            int tempX = x + _x;
+            int tempY = y + _y;
+
+            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+            {
+                if (field[tempX, tempY].animals.Count > 0)
+                {
+                    foreach (Animal o in field[tempX, tempY].animals)
+                    {
+                        if (o is Predator && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
+                        {
+                            return o;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 

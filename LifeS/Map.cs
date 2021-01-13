@@ -8,14 +8,6 @@ namespace LifeS
 {
     class Map
     {
-     
-        //public struct Border
-        //{
-        //    public int left;
-        //    public int right;
-        //    public int top;
-        //    public int bot;
-        //};
         private Cell[,] field;
         public List<Event> mapEvents=new List<Event>();
         public readonly int rows=1000;
@@ -56,7 +48,7 @@ namespace LifeS
                         field[x, y].animals.Add(rand);
                         TotalOfPredators++;
                     }
-                    if (random.Next(200) == 0)
+                    if (random.Next(300) == 0)
                     {                        
                         field[x, y].plant = new Plant(x, y);
                     }
@@ -94,7 +86,7 @@ namespace LifeS
             UpdateAnimalsInfo(x, y);
             List<Animal> rem = field[x, y].animals.OfType<Animal>().Where(animal => animal.changed).ToList();
             List<Animal> add = field[x, y].animals.OfType<Animal>().Where(animal => !animal.changed).ToList();
-
+            
             field[x, y].animals = rem;
 
             foreach (Animal o in add)
@@ -103,13 +95,10 @@ namespace LifeS
                 o.DoSomething(field.GetLength(0), field.GetLength(1), field);
                 field[o.x, o.y].animals.Add(o);
             }
-
-            field[x, y].animals.AddRange(field[x, y].achilds);
-            field[x, y].achilds.Clear();
         }
         public Animal GetHuman(int _x, int _y)
         {
-            if (field[_x, _y].animals.Count > 0)
+            if (field[_x, _y].animals.Count > 0 && field[_x, _y].animals[0] is Animal)
                 return field[_x, _y].animals[0];          
             return null;
         }
@@ -154,7 +143,7 @@ namespace LifeS
                     countPlantsAround++;
                 }
 
-                if (countPlantsAround > 0 && _random.Next(60 / countPlantsAround) == 0)
+                if (countPlantsAround > 0 && _random.Next(360 / countPlantsAround) == 0)
                 {
                     field[x, y].plant = new Plant(x, y);
                 }
@@ -171,15 +160,18 @@ namespace LifeS
       
         private void UpdateAnimalsInfo(int x, int y)
         {
+            
             List<Animal> checkAliveOmnivores = new List<Animal>();
             foreach (Animal o in field[x, y].animals)
             {
+
                 if (o.satiety == 0)
                     o.Dead();
                 if (o.alive)
                 {
                     checkAliveOmnivores.Add(o);
                 }
+
 
             }
 

@@ -34,7 +34,7 @@ namespace LifeS
             
             buttonStart.Text = "RESTART";
             buttonPause.Text = "Pause";
-            sp.SoundLocation = "plants_vs_zombies.wav";
+            //sp.SoundLocation = "plants_vs_zombies.wav";
             
             sp.Play();
 
@@ -75,11 +75,17 @@ namespace LifeS
         private (Brush, Brush) ColorsForType(Animal a)
         {
             if (a is Herbivore)
+            {
                 return (Brushes.Coral, Brushes.Moccasin);
+            }
             else if (a is Omnivore)
+            {
                 return (Brushes.Azure, Brushes.LightGray);
+            }
             else if (a is Predator)
+            {
                 return (Brushes.DeepPink, Brushes.Plum);
+            }
             return (null,null);
         }
         private void DrawGeneration()

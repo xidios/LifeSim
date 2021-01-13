@@ -12,7 +12,7 @@ namespace LifeS
         public int y;
         public Plant plant = null;        
         public List<Animal> animals = new List<Animal>();
-        public List<Animal> achilds = new List<Animal>();
+        //public List<Animal> achilds = new List<Animal>();
 
 
 
