@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="entities\animals\Animal.cs" />
     <Compile Include="Cell.cs" />
+    <Compile Include="entities\animals\Animals.cs" />
     <Compile Include="entities\animals\Omnivore.cs" />
     <Compile Include="entities\animals\Predator.cs" />
     <Compile Include="entities\Entity.cs" />

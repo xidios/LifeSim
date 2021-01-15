@@ -10,7 +10,7 @@ namespace LifeS
     {
         public int x;
         public int y;
-        public bool alive;
+        public bool alive;        
 
         public Entity(int _x, int _y) {
             x = _x;
