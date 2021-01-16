@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LifeS
 {
-    public class Plant : Entity
+    public class Plant : Entity, FoodForOmnivore, FoodForHerbovire
     {
 
         public Plant(int _x, int _y) : base ( _x, _y)

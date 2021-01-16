@@ -62,6 +62,9 @@
     </Compile>
     <Compile Include="enums\Gender.cs" />
     <Compile Include="entities\animals\Herbivore.cs" />
+    <Compile Include="interfaces\FoodForHerbovire.cs" />
+    <Compile Include="interfaces\FoodForOmnivore.cs" />
+    <Compile Include="interfaces\FoodForPredator.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="entities\plants\Plant.cs" />
     <Compile Include="Program.cs" />

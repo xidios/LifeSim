@@ -143,7 +143,7 @@ namespace LifeS
                 humanSatiety.Text = null;
                 status.Text = null;
                 sex.Text = null;
-
+                animalType.Text = null;
             }
 
             Text = $"Generation {gameEngine.CurrentGeneration}";

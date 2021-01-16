@@ -143,7 +143,7 @@ namespace LifeS
                     countPlantsAround++;
                 }
 
-                if (countPlantsAround > 0 && _random.Next(360 / countPlantsAround) == 0)
+                if (countPlantsAround > 0 && _random.Next(300 / countPlantsAround) == 0)
                 {
                     field[x, y].plant = new Plant(x, y);
                 }

@@ -6,34 +6,59 @@ using System.Threading.Tasks;
 
 namespace LifeS
 {
-    abstract public class Animals<T> : Animal
+    abstract public class Animals<T, TFood> : Animal
         //where T : Animal
     {
         public Animals(int _x, int _y, Random rand) : base(_x, _y, rand)
         {
 
         }
-        public Entity CheckTarget(int _x, int _y, ref Cell[,] field)
-        {
-            int tempX = x + _x;
-            int tempY = y + _y;
+        //public Entity CheckTarget(int _x, int _y, ref Cell[,] field)
+        //{
+        //    int tempX = x + _x;
+        //    int tempY = y + _y;
 
-            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
-            {
-                if (field[tempX, tempY].animals.Count > 0)
-                {
-                    foreach (Animal o in field[tempX, tempY].animals)
-                    {
-                        if (o is T && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
-                        {
-                            return o;
-                        }
-                    }
-                }
-            }
+        //    if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+        //    {
+        //        if (field[tempX, tempY].animals.Count > 0)
+        //        {
+        //            foreach (Animal o in field[tempX, tempY].animals)
+        //            {
+        //                if (o is T && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
+        //                {
+        //                    return o;
+        //                }
+        //            }
+        //        }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
+        //public Entity CheckEat(int _x, int _y, ref Cell[,] field)
+        //{
+        //    int tempX = x + _x;
+        //    int tempY = y + _y;
+
+        //    if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+        //    {
+        //        if (typeof(T) == typeof(Omnivore) || typeof(T) == typeof(Herbivore) && field[tempX, tempY].plant != null)
+        //        {
+        //            return field[tempX, tempY].plant;
+        //        }
+        //        if (typeof(T) == typeof(Omnivore) || typeof(T) == typeof(Predator) && field[tempX, tempY].animals.Count > 0)
+        //        {
+        //            foreach (Animal a in field[tempX, tempY].animals)
+        //            {
+        //                if (a is Herbivore)
+        //                {
+        //                    return a;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return null;
+        //}
         public Entity CheckEat(int _x, int _y, ref Cell[,] field)
         {
             int tempX = x + _x;
@@ -41,15 +66,15 @@ namespace LifeS
 
             if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
             {
-                if (typeof(T) == typeof(Omnivore) || typeof(T) == typeof(Herbivore) && field[tempX, tempY].plant != null)
+                if (field[tempX, tempY].plant != null && field[tempX, tempY].plant is TFood)
                 {
                     return field[tempX, tempY].plant;
                 }
-                if (typeof(T) == typeof(Omnivore) || typeof(T) == typeof(Predator) && field[tempX, tempY].animals.Count > 0)
+                if (field[tempX, tempY].animals.Count > 0)
                 {
                     foreach (Animal a in field[tempX, tempY].animals)
                     {
-                        if (a is Herbivore)
+                        if (a is TFood)
                         {
                             return a;
                         }
@@ -111,14 +136,14 @@ namespace LifeS
                 //up horiz
                 for (int x = -i, y = x; x <= i; x++)
                 {
-                    target = CheckTarget(x, y, ref field);
+                    target = CheckTarget<T>(x, y, ref field);
                     if (target != null)
                         return target;
                 }
                 //down horiz
                 for (int x = -i, y = -x; x <= i; x++)
                 {
-                    target = CheckTarget(x, y, ref field);
+                    target = CheckTarget<T>(x, y, ref field);
                     if (target != null)
                         return target;
 
@@ -127,7 +152,7 @@ namespace LifeS
                 //left vert
                 for (int y = -i + 1, x = -i; y < i; y++)
                 {
-                    target = CheckTarget(x, y, ref field);
+                    target = CheckTarget<T>(x, y, ref field);
                     if (target != null)
                         return target;
 
@@ -136,7 +161,7 @@ namespace LifeS
                 //right vert
                 for (int y = -i + 1, x = i; y < i; y++)
                 {
-                    target = CheckTarget(x, y, ref field);
+                    target = CheckTarget<T>(x, y, ref field);
                     if (target != null)
                         return target;
 
@@ -309,5 +334,27 @@ namespace LifeS
             parent.timeLastChild = 150;
             timeLastChild = 200;
         }
+        public Entity CheckTarget<Target>(int _x, int _y, ref Cell[,] field)
+        {
+            int tempX = x + _x;
+            int tempY = y + _y;
+
+            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+            {
+                if (field[tempX, tempY].animals.Count > 0)
+                {
+                    foreach (Animal o in field[tempX, tempY].animals)
+                    {
+                        if (o is Target && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
+                        {
+                            return o;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
     }
 }

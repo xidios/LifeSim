@@ -31,6 +31,7 @@ namespace LifeS
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.animalType = new System.Windows.Forms.Label();
             this.totalOfAnimals = new System.Windows.Forms.Label();
             this.sex = new System.Windows.Forms.Label();
             this.labelTimeChild = new System.Windows.Forms.Label();
@@ -38,20 +39,17 @@ namespace LifeS
             this.humanSatiety = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.buttonPause = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.Density = new System.Windows.Forms.NumericUpDown();
             this.buttonStart = new System.Windows.Forms.Button();
             this.Resolution = new System.Windows.Forms.NumericUpDown();
             this.listView1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.animalType = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Density)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Resolution)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -74,9 +72,7 @@ namespace LifeS
             this.splitContainer1.Panel1.Controls.Add(this.humanSatiety);
             this.splitContainer1.Panel1.Controls.Add(this.label3);
             this.splitContainer1.Panel1.Controls.Add(this.buttonPause);
-            this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
-            this.splitContainer1.Panel1.Controls.Add(this.Density);
             this.splitContainer1.Panel1.Controls.Add(this.buttonStart);
             this.splitContainer1.Panel1.Controls.Add(this.Resolution);
             this.splitContainer1.Panel1.Controls.Add(this.listView1);
@@ -88,6 +84,15 @@ namespace LifeS
             this.splitContainer1.Size = new System.Drawing.Size(1198, 582);
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // animalType
+            // 
+            this.animalType.AutoSize = true;
+            this.animalType.Location = new System.Drawing.Point(49, 356);
+            this.animalType.Name = "animalType";
+            this.animalType.Size = new System.Drawing.Size(76, 13);
+            this.animalType.TabIndex = 20;
+            this.animalType.Text = "Type of animal";
             // 
             // totalOfAnimals
             // 
@@ -154,15 +159,6 @@ namespace LifeS
             this.buttonPause.UseVisualStyleBackColor = true;
             this.buttonPause.Click += new System.EventHandler(this.buttonPause_Click);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(49, 87);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Density";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -171,23 +167,6 @@ namespace LifeS
             this.label1.Size = new System.Drawing.Size(57, 13);
             this.label1.TabIndex = 7;
             this.label1.Text = "Resolution";
-            // 
-            // Density
-            // 
-            this.Density.Location = new System.Drawing.Point(49, 103);
-            this.Density.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.Density.Name = "Density";
-            this.Density.Size = new System.Drawing.Size(120, 20);
-            this.Density.TabIndex = 4;
-            this.Density.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
             // 
             // buttonStart
             // 
@@ -242,14 +221,10 @@ namespace LifeS
             this.timer1.Interval = 150;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // animalType
+            // contextMenuStrip1
             // 
-            this.animalType.AutoSize = true;
-            this.animalType.Location = new System.Drawing.Point(49, 356);
-            this.animalType.Name = "animalType";
-            this.animalType.Size = new System.Drawing.Size(76, 13);
-            this.animalType.TabIndex = 20;
-            this.animalType.Text = "Type of animal";
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // Form1
             // 
@@ -266,7 +241,6 @@ namespace LifeS
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Density)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Resolution)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -279,8 +253,6 @@ namespace LifeS
         private System.Windows.Forms.NumericUpDown Resolution;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.NumericUpDown Density;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonPause;
         private System.Windows.Forms.Label label3;
@@ -292,6 +264,7 @@ namespace LifeS
         private System.Windows.Forms.Label sex;
         private System.Windows.Forms.Label totalOfAnimals;
         private System.Windows.Forms.Label animalType;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }
 
