@@ -17,7 +17,7 @@ namespace LifeS
         public int CurrentGeneration { get; private set; }
         public int TotalOfHerbivores { get; private set; }
         public int TotalOfPredators { get; private set; }
-        public int TotalOfAnimals { get; private set; }
+        public int TotalOfAnimals { get;  set; }
 
 
         public Map(int rows, int cols, int density)
@@ -84,22 +84,27 @@ namespace LifeS
         private void UpdateCellInformation(int x,int y)
         {
             UpdateAnimalsInfo(x, y);
-            List<Animal> rem = field[x, y].animals.OfType<Animal>().Where(animal => animal.changed).ToList();
-            List<Animal> add = field[x, y].animals.OfType<Animal>().Where(animal => !animal.changed).ToList();
             
-            field[x, y].animals = rem;
-
-            foreach (Animal o in add)
+            for (int i = 0; i < field[x, y].animals.Count(); i++)
             {
-                TotalOfAnimals++;
-                o.DoSomething(field.GetLength(0), field.GetLength(1), field);
-                field[o.x, o.y].animals.Add(o);
+                if (field[x, y].animals.Count() > 0 && field[x, y].animals[i] != null && !field[x, y].animals[i].changed)
+                {
+                    
+                    Animal a = null;
+                    a = field[x, y].animals[i];
+                    a.DoSomething(field.GetLength(0), field.GetLength(1), field);
+                    field[a.x, a.y].animals.Add(a);
+                    field[x, y].animals.Remove(a);
+
+                }
             }
+
+
         }
         public Animal GetHuman(int _x, int _y)
         {
             if (field[_x, _y].animals.Count > 0 && field[_x, _y].animals[0] is Animal)
-                return field[_x, _y].animals[0];          
+                return (Animal)field[_x, _y].animals[0];          
             return null;
         }
         private void CheckedToFalse()
