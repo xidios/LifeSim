@@ -70,9 +70,9 @@ namespace LifeS
                 {
                     return field[tempX, tempY].plant;
                 }
-                if (field[tempX, tempY].animals.Count > 0)
+                if (field[tempX, tempY].entity.Count > 0)
                 {
-                    foreach (Animal a in field[tempX, tempY].animals)
+                    foreach (Animal a in field[tempX, tempY].entity)
                     {
                         if (a is TFood)
                         {
@@ -91,9 +91,9 @@ namespace LifeS
 
             if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
             {
-                if (field[tempX, tempY].animals.Count > 0)
+                if (field[tempX, tempY].entity.Count > 0)
                 {
-                    foreach (Animal o in field[tempX, tempY].animals)
+                    foreach (Animal o in field[tempX, tempY].entity)
                     {
                         if (o is Target && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
                         {
@@ -351,7 +351,7 @@ namespace LifeS
             Animal child = (Animal)Activator.CreateInstance(typeof(T), _x, _y, random);
             child.changed = true;
             Animal parent = (Animal)h;
-            field[_x, _y].animals.Add(child);
+            field[_x, _y].entity.Add(child);
             parent.timeLastChild = 150;
             timeLastChild = 200;
         }

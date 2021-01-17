@@ -112,7 +112,7 @@ namespace LifeS
                     if (field[x, y].animals.Count() > 0)
                     {
                         gameEngine.TotalOfAnimals += field[x, y].animals.Count();
-                            ColorChange((Animal)field[x, y].animals[0], x, y);                       
+                            ColorChange(field[x, y].animals[0], x, y);                       
                     }
                     if (observedHuman != null)
                     {

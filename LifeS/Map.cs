@@ -15,8 +15,6 @@ namespace LifeS
         Random random = new Random();
 
         public int CurrentGeneration { get; private set; }
-        public int TotalOfHerbivores { get; private set; }
-        public int TotalOfPredators { get; private set; }
         public int TotalOfAnimals { get;  set; }
 
 
@@ -34,19 +32,20 @@ namespace LifeS
                     if (random.Next(density) == 0)
                     {
                         Herbivore rand = new Herbivore(x, y,random);                       
+                        field[x, y].entity.Add(rand);
                         field[x, y].animals.Add(rand);
-                        TotalOfHerbivores++;
                     }
                     if (random.Next(density*4) == 0)
                     {
                         Omnivore rand = new Omnivore(x, y, random);
+                        field[x, y].entity.Add(rand);
                         field[x, y].animals.Add(rand);
                     }
                     if (random.Next(density*5) == 0)
                     {
                         Predator rand = new Predator(x, y, random);
-                        field[x, y].animals.Add(rand);
-                        TotalOfPredators++;
+                        field[x, y].entity.Add(rand);
+                        field[x, y].animals.Add(rand);                       
                     }
                     if (random.Next(300) == 0)
                     {                        
@@ -68,7 +67,7 @@ namespace LifeS
                     CreateRandomPlant(x, y, random);
                     UpdatePlantsInfo(x, y);
 
-                    if (field[x, y].animals.Count > 0)
+                    if (field[x, y].entity.Count > 0)
                     {
                         UpdateCellInformation(x, y);
                     }
@@ -85,16 +84,18 @@ namespace LifeS
         {
             UpdateAnimalsInfo(x, y);
             
-            for (int i = 0; i < field[x, y].animals.Count(); i++)
+            for (int i = 0; i < field[x, y].entity.Count(); i++)
             {
-                if (field[x, y].animals.Count() > 0 && field[x, y].animals[i] != null && field[x, y].animals[i] is Animal)
+                if (field[x, y].entity.Count() > 0 && field[x, y].entity[i] != null && field[x, y].entity[i] is Animal)
                 {
                     
                     Animal a = null;
-                    a = (Animal)field[x, y].animals[i];
+                    a = (Animal)field[x, y].entity[i];
                     if (!a.changed)
                     {
                         a.DoSomething(field.GetLength(0), field.GetLength(1), field);
+                        field[a.x, a.y].entity.Add(a);
+                        field[x, y].entity.Remove(a);
                         field[a.x, a.y].animals.Add(a);
                         field[x, y].animals.Remove(a);
                     }
@@ -106,8 +107,8 @@ namespace LifeS
         }
         public Animal GetHuman(int _x, int _y)
         {
-            if (field[_x, _y].animals.Count > 0 && field[_x, _y].animals[0] is Animal)
-                return (Animal)field[_x, _y].animals[0];          
+            if (field[_x, _y].entity.Count > 0 && field[_x, _y].entity[0] is Animal)
+                return field[_x, _y].animals[0];          
             return null;
         }
         private void CheckedToFalse()
@@ -116,9 +117,9 @@ namespace LifeS
             {
                 for (int y = 0; y < rows; y++)
                 {
-                    if (field[x, y].animals.Count() > 0)
+                    if (field[x, y].entity.Count() > 0)
                     {
-                        foreach (Animal b in field[x, y].animals)
+                        foreach (Animal b in field[x, y].entity)
                         {
                             b.changed = false;
                         }
@@ -163,16 +164,16 @@ namespace LifeS
         {
 
 
-            for (int i = 0; i < field[x, y].animals.Count(); i++)
+            for (int i = 0; i < field[x, y].entity.Count(); i++)
             {
-                if (field[x, y].animals.Count() > 0 && field[x, y].animals[i] != null && field[x, y].animals[i] is Animal)
+                if (field[x, y].entity.Count() > 0 && field[x, y].entity[i] != null && field[x, y].entity[i] is Animal)
                 {
                     Animal a = null;
-                    a = (Animal)field[x, y].animals[i];
+                    a = (Animal)field[x, y].entity[i];
                     if (a.satiety == 0 || !a.alive)
                     {
                         a.Dead();
-                        field[x, y].animals.Remove(a);
+                        field[x, y].entity.Remove(a);
                     }
                    
                 }

@@ -34,8 +34,8 @@ namespace LifeS
 
             if (x < field.GetLength(0) && x >= 0 && y >= 0 && y < field.GetLength(1))
             {
-                if (field[x, y].animals.Count > 0)               
-                    KillAllEntities(field[x, y].animals);
+                if (field[x, y].entity.Count > 0)               
+                    KillAllEntities(field[x, y].entity);
                 
                 if (field[x, y].plant != null && field[x, y].plant.alive)
                 {
