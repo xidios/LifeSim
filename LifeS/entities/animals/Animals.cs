@@ -57,20 +57,20 @@ namespace LifeS
             return null;
         }
         
-        public Entity FindTarget<Target>(ref Cell[,] field, TypeOfTarget type)
+        private Entity FindTarget<Target>(ref Cell[,] field, TypeOfTarget type)
         {
             int visibility = viewDistance;
             Entity target = null;
             for (int i = 0; i <= visibility; i++)
             {
-                //up horiz
+                //свверхе погоризнтали
                 for (int x = -i, y = x; x <= i; x++)
                 {
                     target = CheckTarget<Target>(x, y, ref field,type);
                     if (target != null)
                         return target;
                 }
-                //down horiz
+                //свнизу по горизонтали
                 for (int x = -i, y = -x; x <= i; x++)
                 {
                     target = CheckTarget<Target>(x, y, ref field,type);
@@ -79,7 +79,7 @@ namespace LifeS
 
                 }
 
-                //left vert
+                //слева вертикально
                 for (int y = -i + 1, x = -i; y < i; y++)
                 {
                     target = CheckTarget<Target>(x, y, ref field,type);
@@ -88,7 +88,7 @@ namespace LifeS
 
                 }
 
-                //right vert
+                //справа вертикально
                 for (int y = -i + 1, x = i; y < i; y++)
                 {
                     target = CheckTarget<Target>(x, y, ref field,type);
@@ -99,17 +99,17 @@ namespace LifeS
             }
             return target;
         }
-        public void MoveRandom(int xSize, int ySize)
+        private void MoveRandom(int xSize, int ySize)
         {
             Direction direction = (Direction)random.Next(5);
             Move(xSize, ySize, direction);
         }
-        public void PanicMove(int xSize, int ySize)
+        private void PanicMove(int xSize, int ySize)
         {
             Direction direction = (Direction)random.Next(4);
             Move(xSize, ySize, direction);
         }
-        public void Move(int xSize, int ySize, Direction direction)
+        private void Move(int xSize, int ySize, Direction direction)
         {
 
             switch (direction)
@@ -149,7 +149,7 @@ namespace LifeS
             satiety--;
         }
 
-        public Direction MoveToTarget(Entity a, int _x, int _y)
+        private Direction MoveToTarget(Entity a, int _x, int _y)
         {
             if (a.x - _x < 0)
             {
@@ -172,7 +172,7 @@ namespace LifeS
             return Direction.none;
         }
 
-        public void EatSmth(int _x, int _y, Entity en)
+        private void EatSmth(int _x, int _y, Entity en)
         {
             if (en is Plant)
             {
@@ -186,7 +186,7 @@ namespace LifeS
             }
         }
 
-        public void SearchTarget<Target>(Cell[,] field, TypeOfTarget type)
+        private void SearchTarget<Target>(Cell[,] field, TypeOfTarget type)
         {
 
             Entity en = null;
@@ -237,7 +237,7 @@ namespace LifeS
         }
 
 
-        
+
 
 
         private void DoChild(int _x, int _y, Cell[,] field, Entity h)
