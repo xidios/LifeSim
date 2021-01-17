@@ -48,8 +48,9 @@ namespace LifeS
                         field[x, y].animals.Add(rand);                       
                     }
                     if (random.Next(300) == 0)
-                    {                        
+                    {                       
                         field[x, y].plant = new Plant(x, y);
+                        field[x, y].entity.Add(field[x, y].plant);
                     }
                 }
             }
@@ -71,10 +72,7 @@ namespace LifeS
                     {
                         UpdateCellInformation(x, y);
                     }
-
-
                 }
-
             }
             
             CheckedToFalse();
@@ -119,7 +117,7 @@ namespace LifeS
                 {
                     if (field[x, y].entity.Count() > 0)
                     {
-                        foreach (Animal b in field[x, y].entity)
+                        foreach (Animal b in field[x, y].animals)
                         {
                             b.changed = false;
                         }
@@ -142,6 +140,7 @@ namespace LifeS
                 if (countPlantsAround > 0 && _random.Next(300 / countPlantsAround) == 0)
                 {
                     field[x, y].plant = new Plant(x, y);
+                    field[x, y].entity.Add(field[x, y].plant);
                 }
             }
         }
@@ -154,9 +153,11 @@ namespace LifeS
         }
         private void UpdatePlantsInfo(int x, int y)
         {
-            if (field[x, y].plant!=null && !field[x, y].plant.alive)
-            {                     
-                    field[x, y].plant=null;
+            if (field[x, y].plant != null && !field[x, y].plant.alive)
+            {
+                field[x, y].entity.Remove(field[x, y].plant);
+                field[x, y].plant = null;
+                
             }
         }
 

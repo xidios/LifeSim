@@ -53,6 +53,7 @@
     <Compile Include="entities\animals\Predator.cs" />
     <Compile Include="entities\Entity.cs" />
     <Compile Include="enums\Direction.cs" />
+    <Compile Include="enums\TypeOfTarget.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

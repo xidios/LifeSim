@@ -13,78 +13,8 @@ namespace LifeS
         {
 
         }
-        //public Entity CheckTarget(int _x, int _y, ref Cell[,] field)
-        //{
-        //    int tempX = x + _x;
-        //    int tempY = y + _y;
-
-        //    if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
-        //    {
-        //        if (field[tempX, tempY].animals.Count > 0)
-        //        {
-        //            foreach (Animal o in field[tempX, tempY].animals)
-        //            {
-        //                if (o is T && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
-        //                {
-        //                    return o;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return null;
-        //}
-        //public Entity CheckEat(int _x, int _y, ref Cell[,] field)
-        //{
-        //    int tempX = x + _x;
-        //    int tempY = y + _y;
-
-        //    if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
-        //    {
-        //        if (typeof(T) == typeof(Omnivore) || typeof(T) == typeof(Herbivore) && field[tempX, tempY].plant != null)
-        //        {
-        //            return field[tempX, tempY].plant;
-        //        }
-        //        if (typeof(T) == typeof(Omnivore) || typeof(T) == typeof(Predator) && field[tempX, tempY].animals.Count > 0)
-        //        {
-        //            foreach (Animal a in field[tempX, tempY].animals)
-        //            {
-        //                if (a is Herbivore)
-        //                {
-        //                    return a;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return null;
-        //}
-        public Entity CheckEat(int _x, int _y, ref Cell[,] field)
-        {
-            int tempX = x + _x;
-            int tempY = y + _y;
-
-            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
-            {
-                if (field[tempX, tempY].plant != null && field[tempX, tempY].plant is TFood)
-                {
-                    return field[tempX, tempY].plant;
-                }
-                if (field[tempX, tempY].entity.Count > 0)
-                {
-                    foreach (Animal a in field[tempX, tempY].entity)
-                    {
-                        if (a is TFood)
-                        {
-                            return a;
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-        public Entity CheckTarget<Target>(int _x, int _y, ref Cell[,] field)
+        
+        public Entity CheckTarget<Target>(int _x, int _y, ref Cell[,] field,TypeOfTarget type)
         {
             int tempX = x + _x;
             int tempY = y + _y;
@@ -93,62 +23,41 @@ namespace LifeS
             {
                 if (field[tempX, tempY].entity.Count > 0)
                 {
-                    foreach (Animal o in field[tempX, tempY].entity)
-                    {
-                        if (o is Target && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
-                        {
-                            return o;
-                        }
-                    }
+                    if (type == TypeOfTarget.ForReproduction)
+                        return ForeachForReproduction<Target>(tempX, tempY, ref field);
+                    if (type == TypeOfTarget.ForFood)
+                        return ForeachForFood<Target>(tempX, tempY, ref field);
                 }
             }
 
             return null;
         }
-        public Entity FindEat(ref Cell[,] field)
+        private Entity ForeachForReproduction<Target>(int _x, int _y, ref Cell[,] field)
         {
-            int visibility = viewDistance;
-            Entity target = null;
-            for (int i = 0; i <= visibility; i++)
+            foreach(Entity e in field[_x, _y].entity)
             {
-                //up horiz
-                for (int x = -i, y = x; x <= i; x++)
+                if (e is Animal && e is T)
                 {
-                    target = CheckEat(x, y, ref field);
-                    if (target != null)
-                        return target;
-                }
-                //down horiz
-                for (int x = -i, y = -x; x <= i; x++)
-                {
-                    target = CheckEat(x, y, ref field);
-                    if (target != null)
-                        return target;
-
-                }
-
-                //left vert
-                for (int y = -i, x = -i; y < i; y++)
-                {
-                    target = CheckEat(x, y, ref field);
-                    if (target != null)
-                        return target;
-
-                }
-
-                //right vert
-                for (int y = -i, x = i; y < i; y++)
-                {
-                    target = CheckEat(x, y, ref field);
-                    if (target != null)
-                        return target;
-
+                    Animal a = (Animal)e;
+                    if ( gender != a.gender && a.satiety >= 50 && a.timeLastChild == 0)
+                    {
+                        return a;
+                    }
                 }
             }
-
-            return target;
+            return null;
         }
-        public Entity FindTarget(ref Cell[,] field)
+        private Entity ForeachForFood<Target>(int _x, int _y, ref Cell[,] field)
+        {
+            foreach (Entity e in field[_x, _y].entity)
+            {
+                if (e is Target)
+                    return e;
+            }
+            return null;
+        }
+        
+        public Entity FindTarget<Target>(ref Cell[,] field, TypeOfTarget type)
         {
             int visibility = viewDistance;
             Entity target = null;
@@ -157,14 +66,14 @@ namespace LifeS
                 //up horiz
                 for (int x = -i, y = x; x <= i; x++)
                 {
-                    target = CheckTarget<T>(x, y, ref field);
+                    target = CheckTarget<Target>(x, y, ref field,type);
                     if (target != null)
                         return target;
                 }
                 //down horiz
                 for (int x = -i, y = -x; x <= i; x++)
                 {
-                    target = CheckTarget<T>(x, y, ref field);
+                    target = CheckTarget<Target>(x, y, ref field,type);
                     if (target != null)
                         return target;
 
@@ -173,7 +82,7 @@ namespace LifeS
                 //left vert
                 for (int y = -i + 1, x = -i; y < i; y++)
                 {
-                    target = CheckTarget<T>(x, y, ref field);
+                    target = CheckTarget<Target>(x, y, ref field,type);
                     if (target != null)
                         return target;
 
@@ -182,7 +91,7 @@ namespace LifeS
                 //right vert
                 for (int y = -i + 1, x = i; y < i; y++)
                 {
-                    target = CheckTarget<T>(x, y, ref field);
+                    target = CheckTarget<Target>(x, y, ref field,type);
                     if (target != null)
                         return target;
 
@@ -277,19 +186,23 @@ namespace LifeS
             }
         }
 
-        public void SearchFood(Cell[,] field)
+        public void SearchTarget<Target>(Cell[,] field, TypeOfTarget type)
         {
 
             Entity en = null;
 
-            en = FindEat(ref field);
+            en = FindTarget<Target>(ref field, type);
 
             Direction direction = Direction.none;
             if (en != null)
                 direction = MoveToTarget(en, x, y);
-            if (direction == Direction.samePosition)
+            if (direction == Direction.samePosition && type == TypeOfTarget.ForFood)
             {
                 EatSmth(x, y, en);
+            }
+            if (direction == Direction.samePosition && type == TypeOfTarget.ForReproduction)
+            {
+                DoChild(x, y, field, en);
 
             }
             else
@@ -306,12 +219,12 @@ namespace LifeS
 
             if (satiety <= 50)
             {
-                SearchFood(field);
+                SearchTarget<TFood>(field,TypeOfTarget.ForFood);
 
             }
             else if (satiety >= 70 && timeLastChild == 0)
             {
-                SearchPartner(field);
+                SearchTarget<T>(field, TypeOfTarget.ForReproduction);
 
             }
             else
@@ -324,25 +237,7 @@ namespace LifeS
         }
 
 
-        private void SearchPartner(Cell[,] field)
-        {
-
-            Entity therbivore = FindTarget(ref field);
-            Direction direction = Direction.none;
-
-            if (therbivore != null)
-                direction = MoveToTarget(therbivore, x, y);
-            if (direction == Direction.samePosition)
-                DoChild(x, y, field, therbivore);
-            else
-            {
-                if (direction == Direction.none)
-                    PanicMove(field.GetLength(0), field.GetLength(1));
-                else
-                    Move(field.GetLength(0), field.GetLength(1), direction);
-
-            }
-        }
+        
 
 
         private void DoChild(int _x, int _y, Cell[,] field, Entity h)
@@ -351,6 +246,7 @@ namespace LifeS
             Animal child = (Animal)Activator.CreateInstance(typeof(T), _x, _y, random);
             child.changed = true;
             Animal parent = (Animal)h;
+            field[_x, _y].animals.Add(child);
             field[_x, _y].entity.Add(child);
             parent.timeLastChild = 150;
             timeLastChild = 200;
