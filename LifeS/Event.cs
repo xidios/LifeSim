@@ -31,7 +31,6 @@ namespace LifeS
                 return;
             }
 
-
             if (x < field.GetLength(0) && x >= 0 && y >= 0 && y < field.GetLength(1))
             {
                 if (field[x, y].entity.Count > 0)               

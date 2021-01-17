@@ -127,7 +127,7 @@ namespace LifeS
             {
                 for (int y = 0; y < rows; y++)
                 {
-                    if (field[x, y].entity.Count() > 0)
+                    if (field[x, y].animals.Count() > 0)
                     {
                         foreach (Animal b in field[x, y].animals)
                         {
