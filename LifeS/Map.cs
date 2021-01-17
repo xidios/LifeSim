@@ -174,6 +174,7 @@ namespace LifeS
                     {
                         a.Dead();
                         field[x, y].entity.Remove(a);
+                        field[x, y].animals.Remove(a);
                     }
                    
                 }
