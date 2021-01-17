@@ -84,6 +84,27 @@ namespace LifeS
 
             return null;
         }
+        public Entity CheckTarget<Target>(int _x, int _y, ref Cell[,] field)
+        {
+            int tempX = x + _x;
+            int tempY = y + _y;
+
+            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
+            {
+                if (field[tempX, tempY].animals.Count > 0)
+                {
+                    foreach (Animal o in field[tempX, tempY].animals)
+                    {
+                        if (o is Target && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
+                        {
+                            return o;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
         public Entity FindEat(ref Cell[,] field)
         {
             int visibility = viewDistance;
@@ -334,27 +355,7 @@ namespace LifeS
             parent.timeLastChild = 150;
             timeLastChild = 200;
         }
-        public Entity CheckTarget<Target>(int _x, int _y, ref Cell[,] field)
-        {
-            int tempX = x + _x;
-            int tempY = y + _y;
-
-            if (!(tempX < 0 || tempX >= field.GetLength(0) || tempY < 0 || tempY >= field.GetLength(1)))
-            {
-                if (field[tempX, tempY].animals.Count > 0)
-                {
-                    foreach (Animal o in field[tempX, tempY].animals)
-                    {
-                        if (o is Target && gender != o.gender && o.satiety >= 50 && o.timeLastChild == 0)
-                        {
-                            return o;
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
+        
 
     }
 }

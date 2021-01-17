@@ -11,7 +11,7 @@ namespace LifeS
         public int x;
         public int y;
         public Plant plant = null;        
-        public List<Animal> animals = new List<Animal>();
+        public List<Entity> animals = new List<Entity>();
 
 
         public Cell(int _x, int _y)

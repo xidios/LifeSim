@@ -87,14 +87,17 @@ namespace LifeS
             
             for (int i = 0; i < field[x, y].animals.Count(); i++)
             {
-                if (field[x, y].animals.Count() > 0 && field[x, y].animals[i] != null && !field[x, y].animals[i].changed)
+                if (field[x, y].animals.Count() > 0 && field[x, y].animals[i] != null && field[x, y].animals[i] is Animal)
                 {
                     
                     Animal a = null;
-                    a = field[x, y].animals[i];
-                    a.DoSomething(field.GetLength(0), field.GetLength(1), field);
-                    field[a.x, a.y].animals.Add(a);
-                    field[x, y].animals.Remove(a);
+                    a = (Animal)field[x, y].animals[i];
+                    if (!a.changed)
+                    {
+                        a.DoSomething(field.GetLength(0), field.GetLength(1), field);
+                        field[a.x, a.y].animals.Add(a);
+                        field[x, y].animals.Remove(a);
+                    }
 
                 }
             }
@@ -125,36 +128,29 @@ namespace LifeS
             }
         }
 
-        private void CreateRandomPlant(int x,int y,Random _random)
+        private void CreateRandomPlant(int x, int y, Random _random)
         {
 
-            if (field[x, y].plant==null)
+            if (field[x, y].plant == null)
             {
                 int countPlantsAround = 0;
-                if (x - 1 >= 0 && field[x - 1, y].plant!= null)
-                {
-                    countPlantsAround++;
-                }
-                if (y - 1 >= 0 && field[x, y - 1].plant != null)
-                {
-                    countPlantsAround++;
-                }
-                if (x + 1 < field.GetLength(0) && field[x + 1, y].plant != null)
-                {
-                    countPlantsAround++;
-                }
-                if (y + 1 < field.GetLength(1) && field[x, y + 1].plant != null)
-                {
-                    countPlantsAround++;
-                }
-
+                CheckNeighborPlants(x - 1, y, ref countPlantsAround);
+                CheckNeighborPlants(x, y - 1, ref countPlantsAround);
+                CheckNeighborPlants(x + 1, y, ref countPlantsAround);
+                CheckNeighborPlants(x, y + 1, ref countPlantsAround);
                 if (countPlantsAround > 0 && _random.Next(300 / countPlantsAround) == 0)
                 {
                     field[x, y].plant = new Plant(x, y);
                 }
             }
         }
-
+        private void CheckNeighborPlants(int x,int y, ref int count)
+        {
+            if (x>= 0 && x<field.GetLength(0) && y >= 0 && y < field.GetLength(1) && field[x, y].plant != null)
+            {
+                count++;
+            }
+        }
         private void UpdatePlantsInfo(int x, int y)
         {
             if (field[x, y].plant!=null && !field[x, y].plant.alive)
@@ -162,25 +158,26 @@ namespace LifeS
                     field[x, y].plant=null;
             }
         }
-      
+
         private void UpdateAnimalsInfo(int x, int y)
         {
-            
-            List<Animal> checkAliveOmnivores = new List<Animal>();
-            foreach (Animal o in field[x, y].animals)
+
+
+            for (int i = 0; i < field[x, y].animals.Count(); i++)
             {
-
-                if (o.satiety == 0)
-                    o.Dead();
-                if (o.alive)
+                if (field[x, y].animals.Count() > 0 && field[x, y].animals[i] != null && field[x, y].animals[i] is Animal)
                 {
-                    checkAliveOmnivores.Add(o);
+                    Animal a = null;
+                    a = (Animal)field[x, y].animals[i];
+                    if (a.satiety == 0 || !a.alive)
+                    {
+                        a.Dead();
+                        field[x, y].animals.Remove(a);
+                    }
+                   
                 }
-
-
             }
-
-            field[x, y].animals = checkAliveOmnivores;
+           
         }
 
         private void StartEvent()

@@ -34,15 +34,9 @@ namespace LifeS
 
             if (x < field.GetLength(0) && x >= 0 && y >= 0 && y < field.GetLength(1))
             {
-                if (field[x, y].animals.Count > 0)
-                {
-                    foreach (Animal h in field[x, y].animals)
-                    {
-                        h.Dead();
-                    }
-
-
-                }
+                if (field[x, y].animals.Count > 0)               
+                    KillAllEntities(field[x, y].animals);
+                
                 if (field[x, y].plant != null && field[x, y].plant.alive)
                 {
                     field[x, y].plant.Dead();
@@ -61,6 +55,12 @@ namespace LifeS
             }
             else distanse = 0;
 
+
+        }
+        private void KillAllEntities(List<Entity> entity) 
+        {
+            foreach (Entity e in entity)           
+                e.Dead();           
 
         }
     }
