@@ -36,7 +36,7 @@ namespace LifeS
             buttonPause.Text = "Pause";
             //sp.SoundLocation = "plants_vs_zombies.wav";
             
-            sp.Play();
+            sp.Play();//music start
 
             labelTimeChild.Text = null;
             humanSatiety.Text = null;
@@ -103,21 +103,7 @@ namespace LifeS
                 for (int y = 0; y < field.GetLength(1); y++)
                 {
 
-                    if (field[x, y].plant != null && field[x, y].plant.alive)
-                    {
-                        graphics.FillRectangle(Brushes.Green, x * resolution, y * resolution, resolution, resolution);
-
-                    }
-
-                    if (field[x, y].animals.Count() > 0)
-                    {
-                        gameEngine.TotalOfAnimals += field[x, y].animals.Count();
-                            ColorChange(field[x, y].animals[0], x, y);                       
-                    }
-                    if (observedHuman != null)
-                    {
-                        graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
-                    }
+                    FillMap(ref field, x, y);
 
                 }
             }
@@ -128,13 +114,38 @@ namespace LifeS
                         graphics.FillRectangle(Brushes.Gold, e.x * resolution, e.y * resolution, resolution, resolution);
             }
 
+            ObservedHuman();
 
+            Text = $"Generation {gameEngine.CurrentGeneration}";
+            totalOfAnimals.Text = $"Total of animals: {gameEngine.TotalOfAnimals}";
+
+            pictureBox1.Refresh();
+        }
+        private void FillMap(ref Cell[,] field,int x, int y) {
+            if (field[x, y].plant != null && field[x, y].plant.alive)
+            {
+                graphics.FillRectangle(Brushes.Green, x * resolution, y * resolution, resolution, resolution);
+
+            }
+
+            if (field[x, y].animals.Count() > 0)
+            {
+                gameEngine.TotalOfAnimals += field[x, y].animals.Count();
+                ColorChange(field[x, y].animals[0], x, y);
+            }
+            if (observedHuman != null)
+            {
+                graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
+            }
+        }
+        private void ObservedHuman()
+        {
             if (observedHuman != null && observedHuman.alive)
             {
                 humanSatiety.Text = $"Satiety: {observedHuman.satiety}";
                 status.Text = $"Status: {((observedHuman.satiety == 0) ? "Dead" : "Alive")}";
                 labelTimeChild.Text = $"Time from last child: {observedHuman.timeLastChild}";
-                sex.Text= $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
+                sex.Text = $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";                
             }
             else
             {
@@ -146,14 +157,7 @@ namespace LifeS
                 sex.Text = null;
                 animalType.Text = null;
             }
-
-            Text = $"Generation {gameEngine.CurrentGeneration}";
-            totalOfAnimals.Text = $"Total of animals: {gameEngine.TotalOfAnimals}";
-
-
-            pictureBox1.Refresh();
         }
-
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -196,7 +200,7 @@ namespace LifeS
                     labelTimeChild.Text = $"Time from last child: {observedHuman.timeLastChild}";
                     sex.Text = $"Sex: {((observedHuman.gender == Gender.male) ? "Male" : "Female")}";
                     animalType.Text = $"Type: {observedHuman.GetType().Name}";
-                    graphics.FillRectangle(Brushes.Blue, observedHuman.x * resolution, observedHuman.y * resolution, resolution, resolution);
+                    
                 }
                 else
                 {

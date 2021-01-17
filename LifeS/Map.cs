@@ -29,32 +29,44 @@ namespace LifeS
                 for (int y = 0; y < rows; y++)
                 {                   
                     field[x, y] = new Cell(cols, rows);
-                    if (random.Next(density) == 0)
-                    {
-                        Herbivore rand = new Herbivore(x, y,random);                       
-                        field[x, y].entity.Add(rand);
-                        field[x, y].animals.Add(rand);
-                    }
-                    if (random.Next(density*4) == 0)
-                    {
-                        Omnivore rand = new Omnivore(x, y, random);
-                        field[x, y].entity.Add(rand);
-                        field[x, y].animals.Add(rand);
-                    }
-                    if (random.Next(density*5) == 0)
-                    {
-                        Predator rand = new Predator(x, y, random);
-                        field[x, y].entity.Add(rand);
-                        field[x, y].animals.Add(rand);                       
-                    }
-                    if (random.Next(300) == 0)
-                    {                       
-                        field[x, y].plant = new Plant(x, y);
-                        field[x, y].entity.Add(field[x, y].plant);
-                    }
+                    CreateHerbivore(x, y, density);
+                    CreateOmnivore(x, y, density);
+                    CreatePredator(x, y, density);
+                    CreatePlant(x, y, density);                                       
                 }
             }
             CurrentGeneration++;
+        }
+        private void CreateHerbivore(int x,int y,int density) {
+            if (random.Next(density) == 0)
+            {
+                Herbivore rand = new Herbivore(x, y, random);
+                field[x, y].entity.Add(rand);
+                field[x, y].animals.Add(rand);
+            }
+        }
+        private void CreateOmnivore(int x, int y, int density){
+            if (random.Next(density * 4) == 0)
+            {
+                Omnivore rand = new Omnivore(x, y, random);
+                field[x, y].entity.Add(rand);
+                field[x, y].animals.Add(rand);
+            }
+        }
+        private void CreatePredator(int x, int y, int density) {
+            if (random.Next(density * 5) == 0)
+            {
+                Predator rand = new Predator(x, y, random);
+                field[x, y].entity.Add(rand);
+                field[x, y].animals.Add(rand);
+            }
+        }
+        private void CreatePlant(int x, int y, int density) {
+            if (random.Next(density/2) == 0)
+            {
+                field[x, y].plant = new Plant(x, y);
+                field[x, y].entity.Add(field[x, y].plant);
+            }
         }
         public Cell[,] NextGeneration()
         {
