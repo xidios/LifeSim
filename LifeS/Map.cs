@@ -117,7 +117,7 @@ namespace LifeS
         }
         public Animal GetHuman(int _x, int _y)
         {
-            if (field[_x, _y].entity.Count > 0 && field[_x, _y].entity[0] is Animal)
+            if (field[_x, _y].animals.Count > 0)
                 return field[_x, _y].animals[0];          
             return null;
         }
@@ -183,7 +183,7 @@ namespace LifeS
                 {
                     Animal a = null;
                     a = (Animal)field[x, y].entity[i];
-                    if (a.satiety == 0 || !a.alive)
+                    if (a.satiety <= 0 || !a.alive)
                     {
                         a.Dead();
                         field[x, y].entity.Remove(a);

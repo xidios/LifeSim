@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace LifeS
 {
     abstract public class Animals<T, TFood> : Animal
-        //where T : Animal
+        where T : Animal
     {
         public Animals(int _x, int _y, Random rand) : base(_x, _y, rand)
         {
@@ -243,7 +243,7 @@ namespace LifeS
         private void DoChild(int _x, int _y, Cell[,] field, Entity h)
         {
 
-            Animal child = (Animal)Activator.CreateInstance(typeof(T), _x, _y, random);
+            Animal child = (Animal)Activator.CreateInstance(typeof(T), _x, _y, random);            
             child.changed = true;
             Animal parent = (Animal)h;
             field[_x, _y].animals.Add(child);

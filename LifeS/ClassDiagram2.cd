@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="LifeS.Cell">
-    <Position X="8.75" Y="0.5" Width="1.5" />
+    <Position X="8" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAAAAAAAAAAEAAAAAAAAABgAAAAEAA=</HashCode>
       <FileName>Cell.cs</FileName>
@@ -14,7 +14,7 @@
       <FileName>entities\animals\Animal.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LifeS.Animals&lt;T, TFood&gt;">
+  <Class Name="LifeS.Animals&lt;T, TFood&gt;" Collapsed="true">
     <Position X="2" Y="2" Width="2.25" />
     <TypeIdentifier>
       <HashCode>EAAAAIcAAIAAAAABAAAAFAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
@@ -52,22 +52,22 @@
     </TypeIdentifier>
   </Class>
   <Class Name="LifeS.Plant">
-    <Position X="7.25" Y="1.75" Width="1.5" />
+    <Position X="5.75" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>entities\plants\Plant.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="LifeS.Event" Collapsed="true">
-    <Position X="11.5" Y="0.5" Width="1.5" />
+  <Class Name="LifeS.Event">
+    <Position X="8" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAACAIQAAAAAAAABAAAAAAAAAAQBgAAAAAAA=</HashCode>
       <FileName>Event.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LifeS.Form1">
-    <Position X="15.25" Y="0.75" Width="1.5" />
+    <Position X="15.5" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CATAAAoAgCAAABBAEATBADBiAACgIYkAAAAAgJDgAAA=</HashCode>
       <FileName>Form1.cs</FileName>
